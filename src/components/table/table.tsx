@@ -2,20 +2,37 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
 
 const columns: GridColDef[] = [
-  { field: "company", headerName: "Company", width: 200 },
-  { field: "industry", headerName: "Industry", width: 200 },
-  { field: "projects", headerName: "Projects", width: 200, renderCell(params) {
-    return (
-      <div>
-        {params.value.length}
-      </div>
-    );
-  }, },
+  { field: "company", headerName: "Company", minWidth: 250 },
   {
-    field: "delete",
-    headerName: "Delete",
-    width: 200,
-    renderCell: () => <button>Delete</button>,
+    align: "center",
+    disableColumnMenu: true,
+    field: "industry",
+    headerAlign: "center",
+    headerName: "Industry",
+    minWidth: 250,
+  },
+  {
+    align: "center",
+    disableColumnMenu: true,
+    field: "projects",
+    headerName: "Projects",
+    headerAlign: "center",
+    minWidth: 200,
+    renderCell(params) {
+      return <div>{params.value.length}</div>;
+    },
+    sortable: false,
+    type: "number"
+
+  },
+  {
+    align: "center",
+    disableColumnMenu: true,
+    field: "actions",
+    headerName: "Actions",
+    minWidth: 250,
+    headerAlign: "center",
+    sortable: false
   },
 ];
 
@@ -27,7 +44,11 @@ const Table = ({ customerData }: TableProps) => {
   if (!customerData.length) return <>No customers were found.</>;
   return (
     <>
-      <DataGrid columns={columns} rows={customerData} />
+      <DataGrid
+        columns={columns}
+        rows={customerData}
+        columnBuffer={columns.length}
+      />
     </>
   );
 };
