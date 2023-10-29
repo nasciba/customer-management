@@ -3,6 +3,7 @@ import { CustomerDataDto } from "../../dtos/customer-data-dto";
 import customers from "../../customers.json";
 import Table from "../../components/table/table";
 import Filter from "../../components/filter/filter";
+import generateDropdownOptions from "../../utils/generate-dropdown-options";
 
 const Home = () => {
   const [activeCustomers, setActiveCustomers] = useState<
@@ -28,16 +29,7 @@ const Home = () => {
   }, [selectedOption]);
 
   const industries = useMemo(() => {
-    return customers
-      .filter(
-        (customer, index, customerList) =>
-          index ===
-          customerList.findIndex(
-            (item) =>
-              item.industry === customer.industry 
-          )
-      )
-      .map((customer) => customer.industry);
+    return generateDropdownOptions(customers)
   }, []);
 
   return (
