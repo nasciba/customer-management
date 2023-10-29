@@ -1,12 +1,12 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 interface FilterProps {
-  menuOptions: string[];
+  selectOptions: string[];
   selectedOption: string;
   setOption: (option: string) => void;
 }
 
-const Filter = ({ menuOptions, selectedOption, setOption }: FilterProps) => {
+const Filter = ({ selectOptions, selectedOption, setOption }: FilterProps) => {
   return (
     <FormControl variant="standard" sx={{ m: 1, minWidth: 250 }}>
       <InputLabel id="demo-simple-select-standard-label">Industry</InputLabel>
@@ -17,7 +17,7 @@ const Filter = ({ menuOptions, selectedOption, setOption }: FilterProps) => {
         onChange={(event) => setOption(event.target.value)}
         label="Industry"
       >
-        {menuOptions.map((option) => {
+        {selectOptions.map((option) => {
           return (
             <MenuItem key={option} value={option}>
               {option}

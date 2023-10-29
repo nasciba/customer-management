@@ -4,10 +4,11 @@ import Filter from "./filter";
 
 describe("Filter", () => {
   const setOptionMock = jest.fn();
+  const selectOptionsMock = ["Travel", "Insurance"];
   it("should render a filter with the label Industry", () => {
     render(
       <Filter
-        menuOptions={[]}
+        selectOptions={selectOptionsMock}
         setOption={setOptionMock}
         selectedOption=""
       />
@@ -18,7 +19,7 @@ describe("Filter", () => {
   it("should render the menu options received in the props when the user clicks on the filter", async () => {
     render(
       <Filter
-        menuOptions={["Travel", "Insurance"]}
+        selectOptions={selectOptionsMock}
         setOption={setOptionMock}
         selectedOption=""
       />

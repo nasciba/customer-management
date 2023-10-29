@@ -44,7 +44,7 @@ const Home = () => {
     <div>
       <h1>Active Customers</h1>
       <Filter
-        menuOptions={industries}
+        selectOptions={industries}
         setOption={setOption}
         selectedOption={selectedOption}
       />
