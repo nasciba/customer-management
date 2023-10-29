@@ -1,14 +1,16 @@
-const generateDropdownOptions = (list: any) => {
+import { CustomerDataDto } from "../dtos/customer-data-dto";
+
+const generateDropdownOptions = (list: CustomerDataDto[]) => {
     return list
       .filter(
-        (item: any, index: number, receivedList: any) =>
+        (item: CustomerDataDto, index: number, receivedList: CustomerDataDto[]) =>
           index ===
           receivedList.findIndex(
-            (listItem: any) =>
+            (listItem: CustomerDataDto) =>
               listItem.industry === item.industry 
           )
       )
-      .map((item: any) => item.industry);
+      .map((item: CustomerDataDto) => item.industry);
 }
 
 export default generateDropdownOptions;
