@@ -4,6 +4,7 @@ import customers from "../../customers.json";
 import Table from "../../components/table/table";
 import Filter from "../../components/filter/filter";
 import generateDropdownOptions from "../../utils/generate-dropdown-options";
+import { Box, Button } from "@mui/material";
 
 const Home = () => {
   const [activeCustomers, setActiveCustomers] = useState<
@@ -35,11 +36,15 @@ const Home = () => {
   return (
     <div>
       <h1>Active Customers</h1>
+      <Box sx={{ display: "flex", justifyContent: "flex-start" }}> 
       <Filter
         selectOptions={industries}
         setOption={setOption}
         selectedOption={selectedOption}
       />
+      <Button href='/add-customer' variant="contained" color="primary" onClick={() => {}}>Add Customer</Button>
+      </Box>
+     
       <Table customerData={activeCustomers} />
     </div>
   );

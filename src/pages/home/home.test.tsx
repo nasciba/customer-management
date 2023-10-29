@@ -30,6 +30,14 @@ describe("Home Page", () => {
     expect(screen.getByRole("cell", { name: "3" })).toBeInTheDocument();
   });
 
+  it("should render a button to add a new customer with a link to redirect the user to the create user page", () => {
+    render(<Home />);
+    expect(
+      screen.getByRole("link", { name: "Add Customer" })
+    ).toHaveAttribute("href", "/add-customer");
+  });
+
+
   describe("Filtering data", () => {
     it("should render the selected option in the filter", async () => {
       render(<Home />);
