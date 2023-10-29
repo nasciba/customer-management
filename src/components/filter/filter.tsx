@@ -1,25 +1,28 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useState } from "react";
 
 interface FilterProps {
   menuOptions: string[];
+  selectedOption: string;
+  setOption: (option: string) => void;
 }
 
-const Filter = ({ menuOptions }: FilterProps) => {
-  const [selectedOption, setSelectedOption] = useState("");
-
+const Filter = ({ menuOptions, selectedOption, setOption }: FilterProps) => {
   return (
-    <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+    <FormControl variant="standard" sx={{ m: 1, minWidth: 250 }}>
       <InputLabel id="demo-simple-select-standard-label">Industry</InputLabel>
       <Select
         labelId="demo-simple-select-standard-label"
         id="demo-simple-select-standard"
         value={selectedOption}
-        onChange={(event) => setSelectedOption(event.target.value)}
+        onChange={(event) => setOption(event.target.value)}
         label="Industry"
       >
         {menuOptions.map((option) => {
-          return <MenuItem key={option} value={option}>{option}</MenuItem>;
+          return (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          );
         })}
       </Select>
     </FormControl>

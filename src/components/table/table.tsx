@@ -10,6 +10,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     headerName: "Industry",
     minWidth: 250,
+    valueFormatter: (params) => params.value.charAt(0).toUpperCase() + params.value.slice(1),
   },
   {
     align: "center",
