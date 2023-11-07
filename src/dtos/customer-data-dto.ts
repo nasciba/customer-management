@@ -3,14 +3,14 @@ export interface CustomerDataDto {
   isActive: boolean;
   company: string;
   industry: string;
-  projects: Project[] | [];
+  projects: ProjectInfo[] | [];
   about: string;
 }
 
-export interface Project {
-  id: string;
+export interface ProjectInfo {
+  id?: string;
   name: string;
   contact: string | null;
-  start_date: string;
+  start_date: string | null;
   end_date: string | null;
 }
