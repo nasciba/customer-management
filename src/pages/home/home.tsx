@@ -42,7 +42,7 @@ const Home = () => {
         setOption={setOption}
         selectedOption={selectedOption}
       />
-      <Button href='/add-customer' variant="contained" color="primary" onClick={() => {}}>Add Customer</Button>
+      <Button href='/add-customer' variant="contained" color="primary">Add Customer</Button>
       </Box>
      
       <Table customerData={activeCustomers} />
