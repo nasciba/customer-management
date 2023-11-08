@@ -1,19 +1,24 @@
 import { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
-import { Box, Button, TextField } from "@mui/material";
+import { AnyAction } from "redux";
+import { Button, Grid, TextField } from "@mui/material";
 import ProjectDetails from "./project-details/project-details";
 import { CustomerDataDto, ProjectInfo } from "../../dtos/customer-data-dto";
 import dayjs, { Dayjs } from "dayjs";
-import "./form.css";
-import { AnyAction } from "redux";
 import uuid from "react-uuid";
+import "./form.css";
 
 interface FormProps {
   customerInfo: CustomerDataDto;
   addCustomerReducer: (payload: CustomerDataDto) => AnyAction;
+  handleSubmit: () => void;
 }
 
-const Form = ({ customerInfo, addCustomerReducer }: FormProps) => {
+const Form = ({
+  customerInfo,
+  addCustomerReducer,
+  handleSubmit,
+}: FormProps) => {
   const dispatch = useDispatch();
   const { about, company, industry, projects } = customerInfo;
 
@@ -87,61 +92,64 @@ const Form = ({ customerInfo, addCustomerReducer }: FormProps) => {
   };
 
   return (
-    <Box display="flex" flexDirection="column">
-      <TextField
-        id="company"
-        name="company"
-        label="Company"
-        variant="outlined"
-        value={company}
-        className="form-margin"
-        onChange={handleInputChange}
-      />
-      <TextField
-        id="industry"
-        name="industry"
-        label="Industry"
-        variant="outlined"
-        value={industry}
-        className="form-margin"
-        onChange={handleInputChange}
-      />
-      <TextField
-        id="about"
-        name="about"
-        label="About"
-        variant="outlined"
-        multiline
-        value={about}
-        className="form-margin"
-        onChange={handleInputChange}
-      />
-      <section>
-        <Box display="flex" flexDirection="column">
-          <h4>Projects</h4>
+    <Grid container>
+      <Grid container>
+        <Grid display="flex" flexDirection="column" item xs={12} md={10}>
+          <TextField
+            id="company"
+            name="company"
+            label="Company"
+            variant="outlined"
+            value={company}
+            className="input-margin"
+            onChange={handleInputChange}
+          />
+          <TextField
+            id="industry"
+            name="industry"
+            label="Industry"
+            variant="outlined"
+            value={industry}
+            className="input-margin"
+            onChange={handleInputChange}
+          />
+          <TextField
+            id="about"
+            name="about"
+            label="About"
+            variant="outlined"
+            multiline
+            value={about}
+            className="input-margin"
+            onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item xs={12} md={2} display="flex" justifyContent="center">
+          <Button className="button-style" onClick={() => handleSubmit()}>
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
+      <Grid container>
+          <h3>Projects</h3>
           {projects?.map((project: ProjectInfo, index: number) => {
-            const projectNumber = index + 1;
             return (
-              <Box key={project.id}>
-                <h5>Project {projectNumber}</h5>
-                <Box display="flex" flexDirection="row" >
-                  <ProjectDetails
-                    project={project}
-                    handleProject={handleProjects}
-                    handleDateChange={handleDateChange}
-                    index={index}
-                  />
-                  <Button onClick={() => handleRemoveProject(index)}>
-                    Remove
-                  </Button>
-                </Box>
-              </Box>
+              <ProjectDetails
+                key={project.id}
+                project={project}
+                handleProject={handleProjects}
+                handleDateChange={handleDateChange}
+                handleRemoveProject={handleRemoveProject}
+                index={index}
+              />
             );
           })}
-          <Button onClick={() => handleAddProject()}>Add project</Button>
-        </Box>
-      </section>
-    </Box>
+          <Grid item xs={12}>
+
+          <Button className="button-style" onClick={() => handleAddProject()}>Add project</Button>
+          </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
