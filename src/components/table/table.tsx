@@ -1,5 +1,6 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
+import Delete from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
 
@@ -36,11 +37,16 @@ const columns: GridColDef[] = [
     minWidth: 250,
     headerAlign: "center",
     sortable: false,
-    renderCell: (params) => (
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    ),
+    renderCell: (params) =>
+      params.row.isActive ? (
+        <IconButton>
+          <EditIcon />
+        </IconButton>
+      ) : (
+        <IconButton>
+          <Delete />
+        </IconButton>
+      ),
   },
 ];
 
@@ -55,7 +61,7 @@ const Table = ({ customerData }: TableProps) => {
       <DataGrid
         columns={columns}
         rows={customerData}
-        columnBuffer={columns.length}
+        columnBuffer={columns.length}       
       />
     </>
   );
