@@ -16,7 +16,7 @@ describe("Filter", () => {
     const filterLabel = screen.getByLabelText("Industry");
     expect(filterLabel).toBeInTheDocument();
   });
-  it("should render the menu options received in the props when the user clicks on the filter", async () => {
+  it("should render the menu options received in the props when the user clicks on the filter", () => {
     render(
       <Filter
         selectOptions={selectOptionsMock}

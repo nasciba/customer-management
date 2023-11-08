@@ -1,4 +1,6 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton } from "@mui/material";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
 
 const columns: GridColDef[] = [
@@ -10,7 +12,8 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     headerName: "Industry",
     minWidth: 250,
-    valueFormatter: (params) => params.value.charAt(0).toUpperCase() + params.value.slice(1),
+    valueFormatter: (params) =>
+      params.value.charAt(0).toUpperCase() + params.value.slice(1),
   },
   {
     align: "center",
@@ -23,8 +26,7 @@ const columns: GridColDef[] = [
       return <div>{params.value.length}</div>;
     },
     sortable: false,
-    type: "number"
-
+    type: "number",
   },
   {
     align: "center",
@@ -33,7 +35,12 @@ const columns: GridColDef[] = [
     headerName: "Actions",
     minWidth: 250,
     headerAlign: "center",
-    sortable: false
+    sortable: false,
+    renderCell: (params) => (
+      <IconButton>
+        <EditIcon />
+      </IconButton>
+    ),
   },
 ];
 
