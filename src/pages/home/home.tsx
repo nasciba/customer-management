@@ -4,7 +4,8 @@ import customers from "../../customers.json";
 import Table from "../../components/table/table";
 import Filter from "../../components/filter/filter";
 import generateDropdownOptions from "../../utils/generate-dropdown-options";
-import { Box, Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
+import "./home.css";
 
 const Home = () => {
   const [activeCustomers, setActiveCustomers] = useState<
@@ -30,23 +31,35 @@ const Home = () => {
   }, [selectedOption]);
 
   const industries = useMemo(() => {
-    return generateDropdownOptions(customers)
+    return generateDropdownOptions(customers);
   }, []);
 
   return (
-    <div>
-      <h1>Active Customers</h1>
-      <Box sx={{ display: "flex", justifyContent: "flex-start" }}> 
-      <Filter
-        selectOptions={industries}
-        setOption={setOption}
-        selectedOption={selectedOption}
-      />
-      <Button href='/add-customer' variant="contained" color="primary">Add Customer</Button>
-      </Box>
-     
-      <Table customerData={activeCustomers} />
-    </div>
+    <Grid container className="padding">
+      <Grid item xs={12}>
+        <h1 className="title">Active Customers</h1>
+      </Grid>
+      <Grid item xs={12} md={3} display="flex" justifyContent="flex-start">
+        <Filter
+          selectOptions={industries}
+          setOption={setOption}
+          selectedOption={selectedOption}
+        />
+      </Grid>
+      <Grid item xs={12} md={9}>
+        <Button
+          className="home-button"
+          href="/add-customer"
+          variant="contained"
+          color="primary"
+        >
+          Add Customer
+        </Button>
+      </Grid>
+      <Grid xs={12} item className="table-margin">
+        <Table customerData={activeCustomers} />
+      </Grid>
+    </Grid>
   );
 };
 
