@@ -49,7 +49,7 @@ const Form = ({
     dispatch(addCustomerReducer(form));
   };
 
-  const handleProjects = (
+  const handleChangeProject = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
@@ -62,9 +62,13 @@ const Form = ({
     name: string,
     index: number
   ) => {
-    const dateString = dayjs(value).toISOString();
-
-    updateState({ property: name, value: dateString, index });
+    if (value?.isValid()) {
+      const dateString = dayjs(value).toISOString();
+      updateState({ property: name, value: dateString, index });
+    }
+    if (value === null) {
+      updateState({ property: name, value: "", index });
+    }
   };
 
   const handleAddProject = () => {
@@ -103,6 +107,7 @@ const Form = ({
             value={company}
             className="input-margin"
             onChange={handleInputChange}
+            inputProps={{ maxLength: 60 }}
           />
           <TextField
             id="industry"
@@ -112,6 +117,7 @@ const Form = ({
             value={industry}
             className="input-margin"
             onChange={handleInputChange}
+            inputProps={{ maxLength: 50 }}
           />
           <TextField
             id="about"
@@ -119,9 +125,11 @@ const Form = ({
             label="About"
             variant="outlined"
             multiline
+            rows={2}
             value={about}
             className="input-margin"
             onChange={handleInputChange}
+            inputProps={{ maxLength: 500 }}
           />
         </Grid>
         <Grid item xs={12} md={2} display="flex" justifyContent="center">
@@ -131,23 +139,24 @@ const Form = ({
         </Grid>
       </Grid>
       <Grid container>
-          <h3>Projects</h3>
-          {projects?.map((project: ProjectInfo, index: number) => {
-            return (
-              <ProjectDetails
-                key={project.id}
-                project={project}
-                handleProject={handleProjects}
-                handleDateChange={handleDateChange}
-                handleRemoveProject={handleRemoveProject}
-                index={index}
-              />
-            );
-          })}
-          <Grid item xs={12}>
-
-          <Button className="button-style" onClick={() => handleAddProject()}>Add project</Button>
-          </Grid>
+        <h3>Projects</h3>
+        {projects?.map((project: ProjectInfo, index: number) => {
+          return (
+            <ProjectDetails
+              key={project.id}
+              project={project}
+              handleChangeProject={handleChangeProject}
+              handleDateChange={handleDateChange}
+              handleRemoveProject={handleRemoveProject}
+              index={index}
+            />
+          );
+        })}
+        <Grid item xs={12}>
+          <Button className="button-style" onClick={() => handleAddProject()}>
+            Add project
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );

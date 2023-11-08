@@ -32,9 +32,10 @@ const addNewCustomerSlice = createSlice({
 
 const store = configureStore({
   reducer: {
-    customers: addNewCustomerSlice.reducer,
+    newCustomer: addNewCustomerSlice.reducer,
   },
-});
+})
 
 export { store };
 export const { addCustomer } = addNewCustomerSlice.actions;
+export default addNewCustomerSlice.reducer;

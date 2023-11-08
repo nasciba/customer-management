@@ -7,7 +7,7 @@ import "./add-customer.css"
 
 const AddCustomerPage = () => {
   const newCustomerInfo: CustomerDataDto = useSelector((state: any) => {
-    return state.customers;
+    return state.newCustomer;
   });
 
   const handleSubmit = () => {

@@ -2,15 +2,14 @@ import { Grid, Button, TextField } from "@mui/material";
 import { ProjectInfo } from "../../../dtos/customer-data-dto";
 import { ChangeEvent } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateField } from "@mui/x-date-pickers/DateField";
 import "./project-details.css";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
 
 interface ProjectProps {
   project: ProjectInfo;
-  handleProject: (
+  handleChangeProject: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => void;
@@ -21,7 +20,7 @@ interface ProjectProps {
 const ProjectDetails = ({
   project,
   index,
-  handleProject,
+  handleChangeProject,
   handleDateChange,
   handleRemoveProject,
 }: ProjectProps) => {
@@ -36,10 +35,11 @@ const ProjectDetails = ({
           <TextField
             id="name"
             name="name"
+            inputProps={{ maxLength: 50 }}
             label="Name"
             variant="outlined"
             value={name}
-            onChange={(event) => handleProject(event, index)}
+            onChange={(event) => handleChangeProject(event, index)}
             className="input-margin"
           />
           <TextField
@@ -47,36 +47,35 @@ const ProjectDetails = ({
             name="contact"
             label="Contact"
             variant="outlined"
+            inputProps={{ itemType: "email" }}
+            placeholder="email@email.com"
             value={contact ?? ""}
-            onChange={(event) => handleProject(event, index)}
+            onChange={(event) => handleChangeProject(event, index)}
             className="input-margin"
           />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DateField", "DateField"]}>
-              <DateField
+          <Grid container>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DesktopDatePicker
                 className="date-margin"
                 label="Start Date"
-                defaultValue={dayjs(start_date ?? null)}
-                name="start_date"
+                value={dayjs(start_date ?? null)}
                 onChange={(newValue) =>
                   handleDateChange(newValue, "start_date", index)
                 }
               />
-            </DemoContainer>
-          </LocalizationProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DateField", "DateField"]}>
-              <DateField
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DesktopDatePicker
                 className="date-margin"
                 label="End Date"
-                defaultValue={dayjs(end_date ?? null)}
-                name="end_date"
+                value={dayjs(end_date ?? null)}
+                views={["day", "month", "year"]}
                 onChange={(newValue) =>
                   handleDateChange(newValue, "end_date", index)
                 }
               />
-            </DemoContainer>
-          </LocalizationProvider>
+            </LocalizationProvider>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={2} display="flex" justifyContent="center">
           <Button
