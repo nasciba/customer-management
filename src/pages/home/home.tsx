@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
 import Table from "../../components/table/table";
 import Filter from "../../components/filter/filter";
+import Box from "@mui/material/Box";
 import generateDropdownOptions from "../../utils/generate-dropdown-options";
 import { Button, CircularProgress, Grid } from "@mui/material";
-import "./home.css";
 import getAllCustomers from "../../service/get-customers";
+import "./home.css";
 
 const Home = () => {
   const activeCustomersDropdown = ["Active", "Inactive"];
@@ -39,10 +40,9 @@ const Home = () => {
         );
         setFilteredList(activeCustomers);
         setCustomersList(activeCustomers);
+        setIsLoading(false);
       } catch (error: unknown) {
         setHasError(true);
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchCustomers();
@@ -70,9 +70,31 @@ const Home = () => {
     return generateDropdownOptions(customersList);
   }, [customersList]);
 
-  if (hasError) return <>Something went wrong.</>;
-  
-  if (isLoading) return <CircularProgress />;
+  if (hasError)
+    return (
+      <Box
+        width="100%"
+        height="100vh"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <h2>Something went wrong.</h2>
+      </Box>
+    );
+
+  if (isLoading)
+    return (
+      <Box
+        width="100%"
+        height="100vh"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CircularProgress />
+      </Box>
+    );
   return (
     <Grid container className="padding">
       <Grid item xs={12}>
@@ -86,10 +108,9 @@ const Home = () => {
           label="Customers"
           displayAllOptions={false}
         />
-       
       </Grid>
       <Grid item xs={12} md={3}>
-      <Filter
+        <Filter
           selectOptions={industries}
           setOption={setIndustry}
           selectedOption={selectedIndustry}
@@ -108,11 +129,7 @@ const Home = () => {
         </Button>
       </Grid>
       <Grid xs={12} item className="table-margin">
-        <Table
-          customerData={filteredList}
-          hasError={hasError}
-          isLoading={isLoading}
-        />
+        <Table customerData={filteredList} />
       </Grid>
     </Grid>
   );
