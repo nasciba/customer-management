@@ -52,13 +52,15 @@ const columns: GridColDef[] = [
 
 interface TableProps {
   customerData: CustomerDataDto[];
+  hasError: boolean
+  isLoading: boolean
 }
 
-const Table = ({ customerData }: TableProps) => {
-  if (!customerData.length) return <>No customers were found.</>;
+const Table = ({ customerData, hasError, isLoading }: TableProps) => {
   return (
     <>
       <DataGrid
+        loading={isLoading}
         columns={columns}
         rows={customerData}
         columnBuffer={columns.length}       

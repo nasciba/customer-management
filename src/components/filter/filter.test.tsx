@@ -11,6 +11,8 @@ describe("Filter", () => {
         selectOptions={selectOptionsMock}
         setOption={setOptionMock}
         selectedOption=""
+        label="Industry"
+        displayAllOptions={true}
       />
     );
     const filterLabel = screen.getByLabelText("Industry");
@@ -22,6 +24,8 @@ describe("Filter", () => {
         selectOptions={selectOptionsMock}
         setOption={setOptionMock}
         selectedOption=""
+        label="Industry"
+        displayAllOptions={true}
       />
     );
     // eslint-disable-next-line testing-library/no-unnecessary-act

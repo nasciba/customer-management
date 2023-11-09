@@ -68,7 +68,7 @@ describe("Service", () => {
     it("should call axios with the right endpoint to get all customers", async () => {
       await getAllCustomers();
       expect(axios.get).toHaveBeenCalledWith(
-        `${process.env.PORT_SERVER}/customers`
+        `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers`
       );
     });
     it("should return the customer data from the response", async () => {
@@ -104,7 +104,7 @@ describe("Service", () => {
     it("should call axios with the right endpoint to get all customers", async () => {
       await getCustomerById("40c0bad7-f1a6-4173-bd44-7ebef044905d");
       expect(axios.get).toHaveBeenCalledWith(
-        `${process.env.PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
+        `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
       );
     });
     it("should return the customer data from the response", async () => {
@@ -142,7 +142,7 @@ describe("Service", () => {
     it("should call axios with the request body", async () => {
       await addNewCustomer(requestMock);
       expect(axios.post).toHaveBeenCalledWith(
-        `${process.env.PORT_SERVER}/customers`,
+        `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers`,
         { body: requestMock }
       );
     });
@@ -174,7 +174,7 @@ describe("Service", () => {
     it("should call axios with the request body", async () => {
       await editCustomer("40c0bad7-f1a6-4173-bd44-7ebef044905d", requestMock);
       expect(axios.put).toHaveBeenCalledWith(
-        `${process.env.PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`,
+        `${process.env.REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`,
         { body: requestMock }
       );
     });
@@ -189,7 +189,7 @@ describe("Service", () => {
     it("should call axios with the right endpoint to get all customers", async () => {
       await deleteCustomer("40c0bad7-f1a6-4173-bd44-7ebef044905d");
       expect(axios.delete).toHaveBeenCalledWith(
-        `${process.env.PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
+        `${process.env.REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
       );
     });
   });
