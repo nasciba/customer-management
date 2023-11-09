@@ -7,7 +7,7 @@ import addNewCustomerSlice from "../store/index";
 export function renderWithProviders(
   ui: React.ReactElement,
   {
-    preloadedState = {} as Record<string, unknown>,
+    preloadedState = {},
     store = configureStore({
       reducer: { newCustomer: addNewCustomerSlice },
       preloadedState,
@@ -19,7 +19,7 @@ export function renderWithProviders(
     renderOptions?: Record<string, unknown>;
   } = {}
 ) {
-  const Wrapper = ({ children }: { children: React.ReactNode }) => {
+  function Wrapper ({ children }: { children: React.ReactNode })  {
     return <Provider store={store}>{children}</Provider>;
   };
 

@@ -4,7 +4,7 @@ import customers from "../../customers.json";
 import Table from "../../components/table/table";
 import Filter from "../../components/filter/filter";
 import generateDropdownOptions from "../../utils/generate-dropdown-options";
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import "./inactive-customers.css";
 
 const InactiveCustomersPage = () => {
