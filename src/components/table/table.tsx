@@ -52,18 +52,19 @@ const columns: GridColDef[] = [
 
 interface TableProps {
   customerData: CustomerDataDto[];
-  hasError: boolean
-  isLoading: boolean
 }
 
-const Table = ({ customerData, hasError, isLoading }: TableProps) => {
+const Table = ({ customerData }: TableProps) => {
   return (
     <>
       <DataGrid
-        loading={isLoading}
         columns={columns}
         rows={customerData}
-        columnBuffer={columns.length}       
+        columnBuffer={columns.length}
+        pageSizeOptions={[5, 10, 20]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 20 } },
+        }}
       />
     </>
   );
