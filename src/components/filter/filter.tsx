@@ -1,10 +1,11 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import "./filter.css";
 
 interface FilterProps {
   label: string;
   selectOptions: string[];
   selectedOption: string;
-  setOption: (option: string) => void;
+  handleChange: (option: string) => void;
   displayAllOptions: boolean;
 }
 
@@ -13,7 +14,7 @@ const Filter = ({
   label,
   selectOptions,
   selectedOption,
-  setOption,
+  handleChange,
 }: FilterProps) => {
   return (
     <FormControl variant="standard" sx={{ m: 1, minWidth: 250 }}>
@@ -21,9 +22,11 @@ const Filter = ({
       <Select
         labelId="demo-simple-select-standard-label"
         id="demo-simple-select-standard"
-        defaultValue={selectedOption ?? ""}
-        onChange={(event) => setOption(event.target.value)}
+        defaultValue=""
+        value={selectedOption}
+        onChange={(event) => handleChange(event.target.value)}
         label={label}
+        className="capitalize-word"
       >
         {displayAllOptions && (
           <MenuItem value="">
@@ -32,7 +35,7 @@ const Filter = ({
         )}
         {selectOptions.map((option) => {
           return (
-            <MenuItem key={option} value={option}>
+            <MenuItem className="capitalize-word" key={option} value={option}>
               {option}
             </MenuItem>
           );

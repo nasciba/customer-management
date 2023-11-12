@@ -1,5 +1,9 @@
-.padding {
+.home-container {
   padding: 1em;
+}
+
+.home-filter-container {
+  margin: 2em 0;
 }
 
 .home-button.MuiButtonBase-root {
@@ -18,10 +22,10 @@
   background-color: #fcb900;
 }
 
-.table-margin {
+.home-table-margin {
   margin-top: 3em;
 }
 
-.title {
+.home-title {
   text-align: center;
 }

@@ -1,135 +1,155 @@
-import { useEffect, useMemo, useState } from "react";
-import { CustomerDataDto } from "../../dtos/customer-data-dto";
-import Table from "../../components/table/table";
+import { useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Button, Grid, IconButton } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import Loading from "../../components/loading/Loading";
+import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Filter from "../../components/filter/filter";
-import Box from "@mui/material/Box";
 import generateDropdownOptions from "../../utils/generate-dropdown-options";
-import { Button, CircularProgress, Grid } from "@mui/material";
-import getAllCustomers from "../../service/get-customers";
+import useDeleteCustomer from "../../hooks/use-delete-customer";
+import useFilterCustomers from "../../hooks/use-filter-customers";
 import "./home.css";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const tableColumns: GridColDef[] = [
+    { field: "company", headerName: "Company", minWidth: 250 },
+    {
+      align: "center",
+      disableColumnMenu: true,
+      field: "industry",
+      headerAlign: "center",
+      headerName: "Industry",
+      minWidth: 250,
+      valueFormatter: (params) =>
+        params.value?.charAt(0).toUpperCase() + params.value.slice(1),
+    },
+    {
+      align: "center",
+      disableColumnMenu: true,
+      field: "projects",
+      headerName: "Projects",
+      headerAlign: "center",
+      minWidth: 200,
+      renderCell(params) {
+        return <div>{params.value.length}</div>;
+      },
+      sortable: false,
+      type: "number",
+    },
+    {
+      align: "center",
+      disableColumnMenu: true,
+      field: "about",
+      headerName: "About",
+      headerAlign: "center",
+      minWidth: 600,
+      sortable: false,
+      type: "number",
+    },
+    {
+      align: "center",
+      disableColumnMenu: true,
+      field: "actions",
+      headerName: "Actions",
+      minWidth: 150,
+      headerAlign: "center",
+      sortable: false,
+      renderCell: (params) =>
+        params.row.isActive ? (
+          <Link to={`/edit-customer/${params.row.id}`}>
+            <Edit />
+          </Link>
+        ) : (
+          <IconButton onClick={() => {
+
+            deleteCustomerFromDb(params.row.id)
+            navigate("/")
+          }
+          }>
+            <Delete />
+          </IconButton>
+        ),
+    },
+  ];
+
+  const {
+    customersList,
+    hasError,
+    isLoading,
+    filteredList,
+    selectedCustomer,
+    selectedIndustry,
+    setCustomer,
+    setIndustry,
+  } = useFilterCustomers();
+
+  const {
+    deleteCustomerFromDb,
+    isLoading: isDeletingCustomer,
+    hasError: errorDeletingCustomer,
+  } = useDeleteCustomer();
+
   const activeCustomersDropdown = ["Active", "Inactive"];
-  const [selectedIndustry, setIndustry] = useState<string>("");
-  const [isActive, setIsActive] = useState<boolean>(true);
-  const [selectedCustomer, setCustomer] = useState<string>("Active");
-  const [filteredList, setFilteredList] = useState<[] | CustomerDataDto[]>([]);
-  const [customersList, setCustomersList] = useState<[] | CustomerDataDto[]>(
-    []
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [hasError, setHasError] = useState<boolean>(false);
-
-  const handleActiveCustomers = (value: string) => {
-    if (value === "Inactive") {
-      setIsActive(false);
-      setCustomer(value);
-    } else {
-      setIsActive(true);
-      setCustomer(value);
-    }
-  };
-
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        setIsLoading(true);
-        const customers = await getAllCustomers();
-        const activeCustomers = customers?.filter(
-          (customer) => customer.isActive === isActive
-        );
-        setFilteredList(activeCustomers);
-        setCustomersList(activeCustomers);
-        setIsLoading(false);
-      } catch (error: unknown) {
-        setHasError(true);
-      }
-    };
-    fetchCustomers();
-  }, [isActive]);
-
-  useEffect(() => {
-    if (selectedIndustry === "") {
-      setFilteredList(
-        customersList.filter(
-          (customer: CustomerDataDto) => customer.isActive === isActive
-        )
-      );
-    } else {
-      setFilteredList(
-        customersList.filter(
-          (customer) =>
-            customer.isActive === isActive &&
-            customer.industry === selectedIndustry
-        )
-      );
-    }
-  }, [selectedIndustry, customersList, isActive]);
-
-  const industries = useMemo(() => {
+  const industriesDropdown = useMemo(() => {
     return generateDropdownOptions(customersList);
   }, [customersList]);
 
-  if (hasError)
-    return (
-      <Box
-        width="100%"
-        height="100vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <h2>Something went wrong.</h2>
-      </Box>
-    );
+  if (hasError || errorDeletingCustomer) return <ErrorScreen />;
 
-  if (isLoading)
-    return (
-      <Box
-        width="100%"
-        height="100vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CircularProgress />
-      </Box>
-    );
+  if (isLoading || isDeletingCustomer) return <Loading />;
   return (
-    <Grid container className="padding">
+    <Grid container className="home-container">
       <Grid item xs={12}>
-        <h1 className="title">Customers</h1>
+        <h1 className="home-title">Customers</h1>
       </Grid>
-      <Grid item xs={12} md={3} display="flex" justifyContent="flex-start">
-        <Filter
-          selectOptions={activeCustomersDropdown}
-          setOption={handleActiveCustomers}
-          selectedOption={selectedCustomer}
-          label="Customers"
-          displayAllOptions={false}
-        />
-      </Grid>
-      <Grid item xs={12} md={3}>
-        <Filter
-          selectOptions={industries}
-          setOption={setIndustry}
-          selectedOption={selectedIndustry}
-          label="Industry"
-          displayAllOptions={true}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Button
-          className="home-button"
-          href="/add-customer"
-          variant="contained"
-          color="primary"
+      <Grid container className="home-filter-container">
+        <Grid
+          item
+          xs={12}
+          lg={5}
+          display="flex"
+          justifyContent="flex-start"
+          flexWrap="wrap"
         >
-          Add Customer
-        </Button>
+          <Filter
+            selectOptions={activeCustomersDropdown}
+            handleChange={setCustomer}
+            selectedOption={selectedCustomer}
+            label="Customers"
+            displayAllOptions={false}
+          />
+          <Filter
+            selectOptions={industriesDropdown}
+            handleChange={setIndustry}
+            selectedOption={selectedIndustry}
+            label="Industry"
+            displayAllOptions={true}
+          />
+        </Grid>
+        <Grid item xs={12} lg={7}>
+          <Button
+            className="home-button"
+            href="/add-customer"
+            variant="contained"
+            color="primary"
+          >
+            Add Customer
+          </Button>
+        </Grid>
       </Grid>
-      <Grid xs={12} item className="table-margin">
-        <Table customerData={filteredList} />
+
+      <Grid xs={12} item className="home-table-margin">
+        <DataGrid
+          columns={tableColumns}
+          rows={filteredList}
+          columnBuffer={tableColumns.length}
+          pageSizeOptions={[5, 10, 20]}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 20 } },
+          }}
+        />
       </Grid>
     </Grid>
   );

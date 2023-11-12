@@ -10,18 +10,17 @@ import "./form.css";
 
 interface FormProps {
   customerInfo: CustomerDataDto;
-  addCustomerReducer: (payload: CustomerDataDto) => AnyAction;
+  reducer: (payload: CustomerDataDto) => AnyAction;
   handleSubmit: () => void;
 }
 
 const Form = ({
   customerInfo,
-  addCustomerReducer,
+  reducer,
   handleSubmit,
 }: FormProps) => {
   const dispatch = useDispatch();
   const { about, company, industry, projects } = customerInfo;
-
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -29,7 +28,7 @@ const Form = ({
     let form = { ...customerInfo };
     form = { ...customerInfo, [name]: value };
 
-    dispatch(addCustomerReducer(form));
+    dispatch(reducer(form));
   };
 
   interface UpdateState {
@@ -46,7 +45,7 @@ const Form = ({
 
     const form = { ...customerInfo, projects: updatedProjectsList };
 
-    dispatch(addCustomerReducer(form));
+    dispatch(reducer(form));
   };
 
   const handleChangeProject = (
@@ -84,7 +83,7 @@ const Form = ({
 
     projects.push(project);
 
-    dispatch(addCustomerReducer({ ...customerInfo, projects }));
+    dispatch(reducer({ ...customerInfo, projects }));
   };
 
   const handleRemoveProject = (index: number) => {
@@ -92,7 +91,7 @@ const Form = ({
 
     projects.splice(index, 1);
 
-    dispatch(addCustomerReducer({ ...customerInfo, projects }));
+    dispatch(reducer({ ...customerInfo, projects }));
   };
 
   return (

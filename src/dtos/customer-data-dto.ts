@@ -1,5 +1,5 @@
 export interface CustomerDataDto {
-  id: string;
+  id?: string;
   isActive: boolean;
   company: string;
   industry: string;
