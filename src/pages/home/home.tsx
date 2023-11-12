@@ -6,9 +6,9 @@ import { Delete, Edit } from "@mui/icons-material";
 import Loading from "../../components/loading/Loading";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Filter from "../../components/filter/filter";
-import generateDropdownOptions from "../../utils/generate-dropdown-options";
-import useDeleteCustomer from "../../hooks/use-delete-customer";
-import useFilterCustomers from "../../hooks/use-filter-customers";
+import generateDropdownOptions from "../../utils/generateDropdownOptions";
+import useDeleteCustomer from "../../hooks/useDeleteCustomer";
+import useFilterCustomers from "../../hooks/useFilterCustomer";
 import "./home.css";
 
 const Home = () => {

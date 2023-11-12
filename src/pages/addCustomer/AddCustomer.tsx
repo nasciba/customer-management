@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addCustomer } from "./add-customer-slice";
+import { addCustomer } from "./addCustomerSlice";
 import { Box } from "@mui/material";
 import Form from "../../components/form/form";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
 import addNewCustomer from "../../service/add-new-customer";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Loading from "../../components/loading/Loading";
-import "./add-customer.css"
+import "./addCustomer.css"
 
 const AddCustomerPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

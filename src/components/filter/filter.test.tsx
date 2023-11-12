@@ -9,7 +9,7 @@ describe("Filter", () => {
     render(
       <Filter
         selectOptions={selectOptionsMock}
-        setOption={setOptionMock}
+        handleChange={setOptionMock}
         selectedOption=""
         label="Industry"
         displayAllOptions={true}
@@ -22,7 +22,7 @@ describe("Filter", () => {
     render(
       <Filter
         selectOptions={selectOptionsMock}
-        setOption={setOptionMock}
+        handleChange={setOptionMock}
         selectedOption=""
         label="Industry"
         displayAllOptions={true}
@@ -33,6 +33,8 @@ describe("Filter", () => {
       userEvent.click(screen.getByRole("combobox", { name: "Industry" }));
     });
     expect(screen.getByRole("option", { name: "Travel" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Insurance" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "Insurance" })
+    ).toBeInTheDocument();
   });
 });

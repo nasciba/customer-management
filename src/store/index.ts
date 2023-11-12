@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import addNewCustomerSlice from '../pages/add-customer/add-customer-slice';
-import editCustomerSlice from "../pages/edit-customer/edit-customer-slice";
+import addNewCustomerSlice from '../pages/addCustomer/addCustomerSlice';
+import editCustomerSlice from "../pages/editCustomer/editCustomerSlice";
 
 const store = configureStore({
   reducer: {

@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { AnyAction } from "redux";
 import { Button, Grid, TextField } from "@mui/material";
-import ProjectDetails from "./project-details/project-details";
+import ProjectDetails from "./projectDetails/ProjectDetails";
 import { CustomerDataDto, ProjectInfo } from "../../dtos/customer-data-dto";
 import dayjs, { Dayjs } from "dayjs";
 import uuid from "react-uuid";

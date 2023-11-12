@@ -1,15 +1,15 @@
-import { editCustomer } from "./edit-customer-slice";
-import { Box } from "@mui/material";
-import Form from "../../components/form/form";
-import { CustomerDataDto } from "../../dtos/customer-data-dto";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { editCustomer } from "./editCustomerSlice";
+import { Box } from "@mui/material";
+import Form from "../../components/form/form";
+import ErrorScreen from "../../components/errorScreen/ErrorScreen";
+import Loading from "../../components/loading/Loading";
+import { CustomerDataDto } from "../../dtos/customer-data-dto";
 import getCustomerById from "../../service/get-customer";
 import editCustomerService from "../../service/edit-customer";
-import { useDispatch, useSelector } from "react-redux";
-import "./edit-customer.css";
-import Loading from "../../components/loading/Loading";
-import ErrorScreen from "../../components/errorScreen/ErrorScreen";
+import "./editCustomer.css";
 
 const EditCustomerPage = () => {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const EditCustomerPage = () => {
 
   useEffect(() => {
     getCustomer(id);
-  }, [id]);
+  }, []);
 
   if (isLoading) return <Loading />;
   if (hasError) return <ErrorScreen />;

@@ -4,8 +4,8 @@ import { ChangeEvent } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "./project-details.css";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
+import "./projectDetails.css";
 
 interface ProjectProps {
   project: ProjectInfo;

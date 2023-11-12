@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-unnecessary-act */
-import Project from "./project-details";
+import Project from "./ProjectDetails";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 

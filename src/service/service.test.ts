@@ -1,6 +1,6 @@
 import addNewCustomer from "./add-new-customer";
 import getAllCustomers from "./get-customers";
-import editCustomer from "./edit-customer";
+import editCustomerService from "./edit-customer";
 import deleteCustomer from "./delete-customer";
 import getCustomerById from "./get-customer";
 import axios from "axios";
@@ -147,7 +147,7 @@ describe("Service", () => {
       );
     });
   });
-  describe("editCustomer", () => {
+  describe("editCustomerService", () => {
     const requestMock = {
       id: "40c0bad7-f1a6-4173-bd44-7ebef044905d",
       isActive: true,
@@ -172,7 +172,7 @@ describe("Service", () => {
       jest.clearAllMocks();
     });
     it("should call axios with the request body", async () => {
-      await editCustomer("40c0bad7-f1a6-4173-bd44-7ebef044905d", requestMock);
+      await editCustomerService("40c0bad7-f1a6-4173-bd44-7ebef044905d", requestMock);
       expect(axios.put).toHaveBeenCalledWith(
         `${process.env.REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`,
         { body: requestMock }

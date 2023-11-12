@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
+import { renderWithProviders } from "../../utils/testUtils";
 
-import AddCustomer from "./add-customer";
+import AddCustomer from "./AddCustomer";
 describe("Add Customer Page", () => {
   it("should render the add customer page title", () => {
     renderWithProviders(<AddCustomer />);
