@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CustomerDataDto } from "../dtos/customer-data-dto";
 import getAllCustomers from "../service/get-customers";
+import deleteCustomer from "../service/delete-customer";
 
 const useFilterCustomers = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -12,18 +13,16 @@ const useFilterCustomers = () => {
     []
   );
   const [filteredList, setFilteredList] = useState<[] | CustomerDataDto[]>([]);
-  
-  const buildQuery = (): string => {
-    if(selectedIndustry === "") {
-      return `isActive=${isCustomerActive}`;
-    }
-    else {
-      return `isActive=${isCustomerActive}&industry=${selectedIndustry}`
-    }
-  }
 
-  const filterCustomers = async (): Promise<void> => {
-    const query = buildQuery();
+  const buildQuery = useCallback((): string => {
+    if (selectedIndustry === "") {
+      return `isActive=${isCustomerActive}`;
+    } else {
+      return `isActive=${isCustomerActive}&industry=${selectedIndustry}`;
+    }
+  }, [selectedIndustry, isCustomerActive]);
+
+  const filterCustomers = useCallback(async (query: string): Promise<void> => {
 
     try {
       setIsLoading(true);
@@ -33,34 +32,46 @@ const useFilterCustomers = () => {
     } catch (error: unknown) {
       setHasError(true);
     }
-  };
+  }, [buildQuery]);
 
-  const fetchCustomers = async (): Promise<void> => {
+  const fetchCustomers = useCallback(async (): Promise<void> => {
     const query = `isActive=${isCustomerActive}`;
 
     try {
       setIsLoading(true);
+
       const customers = await getAllCustomers(query);
       setCustomersList(customers);
       setIsLoading(false);
     } catch (error: unknown) {
       setHasError(true);
     }
-  };
+  }, [isCustomerActive]);
+
+  const deleteCustomerFromDb = useCallback(async (id: string) => {
+    const query = `isActive=${isCustomerActive}`;
+
+    try {
+      setIsLoading(true);
+      await deleteCustomer(id);
+      filterCustomers(query)
+      setIsLoading(false);
+    } catch (error: unknown) {
+      setHasError(true);
+    }
+  }, [filterCustomers]);
 
   useEffect(() => {
     fetchCustomers();
-  }, [isCustomerActive]);
+  }, [fetchCustomers, isCustomerActive, deleteCustomerFromDb]);
+
 
   useEffect(() => {
-    filterCustomers();
-  }, [selectedIndustry, isCustomerActive]);
+    const query = buildQuery();
+    filterCustomers(query);
+  }, [selectedIndustry, isCustomerActive, filterCustomers, buildQuery, deleteCustomerFromDb]);
 
-  useEffect(() => {
-    if (selectedIndustry === "") {
-      setFilteredList(customersList);
-    }
-  }, [selectedIndustry, customersList]);
+
 
   useEffect(() => {
     if (selectedCustomer === "Inactive") {
@@ -82,6 +93,7 @@ const useFilterCustomers = () => {
     setIndustry,
     setFilteredList,
     setIsCustomerActive,
+    deleteCustomerFromDb,
   };
 };
 
