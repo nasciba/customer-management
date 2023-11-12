@@ -1,23 +1,63 @@
-import { useSelector } from "react-redux";
-import { addCustomer } from "../../store";
+import { editCustomer } from "./edit-customer-slice";
 import { Box } from "@mui/material";
 import Form from "../../components/form/form";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
-import "./edit-customer.css"
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import getCustomerById from "../../service/get-customer";
+import editCustomerService from "../../service/edit-customer";
+import { useDispatch, useSelector } from "react-redux";
+import "./edit-customer.css";
+import Loading from "../../components/loading/Loading";
+import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 
 const EditCustomerPage = () => {
-  const newCustomerInfo: CustomerDataDto = useSelector((state: any) => {
-    return state.newCustomer;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const customerInfo: CustomerDataDto = useSelector((state: any) => {
+    return state.editCustomer;
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
 
-  const handleSubmit = () => {
-    console.log(newCustomerInfo)
-  }
+  const { id } = useParams() as { id: string };
 
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true);
+      await editCustomerService(id, customerInfo);
+      setIsLoading(false);
+      navigate("/");
+    } catch (error: unknown) {
+      setHasError(true);
+    }
+  };
+
+  const getCustomer = async (id: string): Promise<void> => {
+    try {
+      setIsLoading(true);
+      const customer = await getCustomerById(id);
+      dispatch(editCustomer(customer));
+      setIsLoading(false);
+    } catch (error) {
+      setHasError(true);
+    }
+  };
+
+  useEffect(() => {
+    getCustomer(id);
+  }, [id]);
+
+  if (isLoading) return <Loading />;
+  if (hasError) return <ErrorScreen />;
   return (
     <Box className="padding" display="flex" flexDirection="column">
       <h1 className="title">Edit Customer</h1>
-      <Form customerInfo={newCustomerInfo} addCustomerReducer={addCustomer} handleSubmit={handleSubmit}/>
+      <Form
+        customerInfo={customerInfo}
+        reducer={editCustomer}
+        handleSubmit={handleSubmit}
+      />
     </Box>
   );
 };

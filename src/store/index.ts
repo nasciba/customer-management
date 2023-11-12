@@ -1,41 +1,12 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-import uuid from "react-uuid";
-import { CustomerDataDto, ProjectInfo } from "../dtos/customer-data-dto";
-
-const addNewCustomerSlice = createSlice({
-  name: "newCustomer",
-  initialState: {
-    id: uuid(),
-    isActive: true,
-    company: "",
-    industry: "",
-    about: "",
-    projects: [
-      {
-        id: uuid(),
-        name: "",
-        contact: "",
-        start_date: null,
-        end_date: null,
-      },
-    ] as ProjectInfo[] | [],
-  },
-  reducers: {
-    addCustomer(
-      state: CustomerDataDto,
-      action: { type: string; payload: CustomerDataDto }
-    ) {
-      Object.assign(state, action.payload);
-    },
-  },
-});
+import { configureStore } from "@reduxjs/toolkit";
+import addNewCustomerSlice from '../pages/add-customer/add-customer-slice';
+import editCustomerSlice from "../pages/edit-customer/edit-customer-slice";
 
 const store = configureStore({
   reducer: {
     newCustomer: addNewCustomerSlice.reducer,
+    editCustomer: editCustomerSlice.reducer
   },
 })
 
 export { store };
-export const { addCustomer } = addNewCustomerSlice.actions;
-export default addNewCustomerSlice.reducer;
