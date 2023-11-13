@@ -1,0 +1,47 @@
+.home {
+  &-about-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &-container {
+    padding: 1em;
+  }
+
+  &-filter-container {
+    margin: 2em 0;
+  }
+
+  &-button.MuiButtonBase-root {
+    width: 12em;
+    background-color: #ffd01c;
+    color: #261a2f;
+    font-family: "Lexend", Sans-serif;
+    border-radius: 40px;
+    height: 3em;
+    margin-top: 1em;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  &-button.MuiButtonBase-root:hover {
+    background-color: #fcb900;
+  }
+
+  &-icon-color {
+    color: #261a2f;
+  }
+
+  &-table {
+    margin-top: 3em;
+    background-color: #fff;
+    margin: 8px;
+    min-height: 60vh;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &-title {
+    text-align: center;
+  }
+}

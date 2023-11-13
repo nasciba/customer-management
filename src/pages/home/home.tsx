@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button, Grid, IconButton } from "@mui/material";
+import { Button, Grid, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import Loading from "../../components/loading/Loading";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
@@ -10,7 +10,7 @@ import generateDropdownOptions from "../../utils/generateDropdownOptions";
 import useFilterCustomers from "../../hooks/useFilterCustomer";
 import { useSelector } from "react-redux";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
-import "./home.css";
+import "./home.scss";
 
 const Home = () => {
   const tableColumns: GridColDef[] = [
@@ -45,6 +45,11 @@ const Home = () => {
       headerName: "About",
       headerAlign: "center",
       minWidth: 400,
+      renderCell: (params) => (
+        <Tooltip title={params.value}>
+          <div className="home-about-text">{params.value}</div>
+        </Tooltip>
+      ),
       sortable: false,
       type: "number",
     },
@@ -59,7 +64,7 @@ const Home = () => {
       renderCell: (params) =>
         params.row.isActive ? (
           <Link to={`/edit-customer/${params.row.id}`} aria-label="edit">
-            <Edit />
+            <Edit className='home-icon-color'/>
           </Link>
         ) : (
           <IconButton aria-label="delete"
@@ -67,7 +72,7 @@ const Home = () => {
               deleteCustomerFromDb(params.row.id);
             }}
           >
-            <Delete />
+            <Delete  className='home-icon-color'/>
           </IconButton>
         ),
     },
@@ -144,9 +149,10 @@ const Home = () => {
         </Grid>
       </Grid>
 
-      <Grid xs={12} item className="home-table-margin">
+      <Grid xs={12} item>
         <DataGrid
           columns={tableColumns}
+          className="home-table"
           rows={filteredList}
           columnBuffer={tableColumns.length}
           pageSizeOptions={[5, 10, 20]}
