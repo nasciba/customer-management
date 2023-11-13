@@ -1,7 +1,7 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import { screen, render } from "@testing-library/react";
 import Home from "./Home";
-import getAllCustomers from "../../service/get-customers";
+import getAllCustomers from "../../service/getCustomers";
 
 jest.mock("../../service/get-customers");
 

@@ -32,7 +32,6 @@ const customersListSlice = createSlice({
           return customer.industry === action.payload;
         });
         state.filteredList = [];
-        console.log("filteredList", filteredList);
         Object.assign(state.filteredList, filteredList);
       }
     },

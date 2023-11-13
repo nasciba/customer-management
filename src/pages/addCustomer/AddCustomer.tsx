@@ -5,7 +5,7 @@ import { addCustomer } from "./addCustomerSlice";
 import { Box } from "@mui/material";
 import Form from "../../components/form/form";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
-import addNewCustomer from "../../service/add-new-customer";
+import addNewCustomer from "../../service/addNewCustomer";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Loading from "../../components/loading/Loading";
 import "./addCustomer.css"

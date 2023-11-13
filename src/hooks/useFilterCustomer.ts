@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import getAllCustomers from "../service/get-customers";
-import deleteCustomer from "../service/delete-customer";
-import { filterCustomers, setCustomersList } from "../pages/home/customerListSlice";
 import { useDispatch } from "react-redux";
+import { filterCustomers, setCustomersList } from "../pages/home/customerListSlice";
+import getAllCustomersService from "../service/getCustomers";
+import deleteCustomerService from "../service/deleteCustomer";
 
 const useFilterCustomers = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -18,7 +18,7 @@ const useFilterCustomers = () => {
 
     try {
       setIsLoading(true);
-      const customers = await getAllCustomers(query);
+      const customers = await getAllCustomersService(query);
       setIndustry("");
       dispatch(setCustomersList(customers));
       setIsLoading(false);
@@ -31,7 +31,7 @@ const useFilterCustomers = () => {
 
     try {
       setIsLoading(true);
-      await deleteCustomer(id);
+      await deleteCustomerService(id);
       fetchCustomers();
       setIsLoading(false);
     } catch (error: unknown) {

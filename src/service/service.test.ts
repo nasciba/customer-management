@@ -1,8 +1,8 @@
-import addNewCustomer from "./add-new-customer";
-import getAllCustomers from "./get-customers";
-import editCustomerService from "./edit-customer";
-import deleteCustomer from "./delete-customer";
-import getCustomerById from "./get-customer";
+import addNewCustomerService from "./addNewCustomer";
+import getAllCustomersService from "./getCustomers";
+import editCustomerService from "./editCustomer";
+import deleteCustomerService from "./deleteCustomer";
+import getCustomerByIdService from "./getCustomer";
 import axios from "axios";
 
 jest.mock("axios");
@@ -66,13 +66,13 @@ describe("Service", () => {
       jest.clearAllMocks();
     });
     it("should call axios with the right endpoint to get all customers", async () => {
-      await getAllCustomers();
+      await getAllCustomersService();
       expect(axios.get).toHaveBeenCalledWith(
         `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers`
       );
     });
     it("should return the customer data from the response", async () => {
-      const response = await getAllCustomers();
+      const response = await getAllCustomersService();
       expect(response).toEqual(customersResponse);
     });
   });
@@ -102,13 +102,13 @@ describe("Service", () => {
       jest.clearAllMocks();
     });
     it("should call axios with the right endpoint to get all customers", async () => {
-      await getCustomerById("40c0bad7-f1a6-4173-bd44-7ebef044905d");
+      await getCustomerByIdService("40c0bad7-f1a6-4173-bd44-7ebef044905d");
       expect(axios.get).toHaveBeenCalledWith(
         `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
       );
     });
     it("should return the customer data from the response", async () => {
-      const response = await getCustomerById(
+      const response = await getCustomerByIdService(
         "40c0bad7-f1a6-4173-bd44-7ebef044905d"
       );
       expect(response).toEqual(customerResponse);
@@ -140,7 +140,7 @@ describe("Service", () => {
       jest.clearAllMocks();
     });
     it("should call axios with the request body", async () => {
-      await addNewCustomer(requestMock);
+      await addNewCustomerService(requestMock);
       expect(axios.post).toHaveBeenCalledWith(
         `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers`,
         { body: requestMock }
@@ -187,7 +187,7 @@ describe("Service", () => {
       jest.clearAllMocks();
     });
     it("should call axios with the right endpoint to get all customers", async () => {
-      await deleteCustomer("40c0bad7-f1a6-4173-bd44-7ebef044905d");
+      await deleteCustomerService("40c0bad7-f1a6-4173-bd44-7ebef044905d");
       expect(axios.delete).toHaveBeenCalledWith(
         `${process.env.REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
       );

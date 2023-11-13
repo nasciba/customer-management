@@ -7,8 +7,8 @@ import Form from "../../components/form/form";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Loading from "../../components/loading/Loading";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
-import getCustomerById from "../../service/get-customer";
-import editCustomerService from "../../service/edit-customer";
+import getCustomerById from "../../service/getCustomer";
+import editCustomerService from "../../service/editCustomer";
 import "./editCustomer.css";
 
 const EditCustomerPage = () => {
