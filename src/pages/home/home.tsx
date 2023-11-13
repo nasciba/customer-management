@@ -91,7 +91,7 @@ const Home = () => {
     setIndustry,
     deleteCustomerFromDb,
   } = useFilterCustomers();
-  console.log(isLoading, hasError, selectedCustomer, selectedIndustry, setCustomer, setIndustry, deleteCustomerFromDb)
+
   const activeCustomersDropdown = ["Active", "Inactive"];
   
   const industriesDropdown = useMemo(() => {
