@@ -7,7 +7,23 @@ import axios from "axios";
 
 jest.mock("axios");
 describe("Service", () => {
-  describe("getCustomers", () => {
+  const requestMock = {
+    id: "40c0bad7-f1a6-4173-bd44-7ebef044905d",
+    isActive: true,
+    company: "Some Company",
+    industry: "insurance",
+    projects: [
+      {
+        id: "69812942-9b25-4eb1-8fe2-7b3709f9b29e",
+        name: "Some name",
+        contact: "ldodamead0@wikipedia.org",
+        start_date: "2021-10-26T03:45:04Z",
+        end_date: "2022-06-16T16:27:29Z",
+      },
+    ],
+    about: "Some description",
+  };
+  describe("getCustomersService", () => {
     const customersResponse = [
       {
         id: "40c0bad7-f1a6-4173-bd44-7ebef044905d",
@@ -77,7 +93,7 @@ describe("Service", () => {
       expect(response).toEqual(customersResponse);
     });
   });
-  describe("getCustomerById", () => {
+  describe("getCustomerByIdService", () => {
     const customerResponse = {
       id: "40c0bad7-f1a6-4173-bd44-7ebef044905d",
       isActive: false,
@@ -116,31 +132,14 @@ describe("Service", () => {
     });
   });
 
-  describe("addNewCustomer", () => {
-    const requestMock = {
-      id: "40c0bad7-f1a6-4173-bd44-7ebef044905d",
-      isActive: true,
-      company: "Some Company",
-      industry: "insurance",
-      projects: [
-        {
-          id: "69812942-9b25-4eb1-8fe2-7b3709f9b29e",
-          name: "Some name",
-          contact: "ldodamead0@wikipedia.org",
-          start_date: "2021-10-26T03:45:04Z",
-          end_date: "2022-06-16T16:27:29Z",
-        },
-      ],
-      about: "Some description",
-    };
-
+  describe("addNewCustomerService", () => {
     beforeEach(() => {
       (axios.post as jest.Mock).mockResolvedValue({});
     });
     afterEach(() => {
       jest.clearAllMocks();
     });
-    it("should call axios with the request body", async () => {
+    it("should call axios with the request body with the right endpoint", async () => {
       await addNewCustomerService(requestMock);
       expect(axios.post).toHaveBeenCalledWith(
         `${process.env.REACT_APP_PORT_SERVER}/customers`,
@@ -149,30 +148,13 @@ describe("Service", () => {
     });
   });
   describe("editCustomerService", () => {
-    const requestMock = {
-      id: "40c0bad7-f1a6-4173-bd44-7ebef044905d",
-      isActive: true,
-      company: "Some Company",
-      industry: "insurance",
-      projects: [
-        {
-          id: "69812942-9b25-4eb1-8fe2-7b3709f9b29e",
-          name: "Some name",
-          contact: "ldodamead0@wikipedia.org",
-          start_date: "2021-10-26T03:45:04Z",
-          end_date: "2022-06-16T16:27:29Z",
-        },
-      ],
-      about: "Some description",
-    };
-
     beforeEach(() => {
       (axios.put as jest.Mock).mockResolvedValue({});
     });
     afterEach(() => {
       jest.clearAllMocks();
     });
-    it("should call axios with the request body", async () => {
+    it("should call axios with the request body with the right endpoint", async () => {
       await editCustomerService(
         "40c0bad7-f1a6-4173-bd44-7ebef044905d",
         requestMock
