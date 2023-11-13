@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { CustomerDataDto } from "../dtos/customer-data-dto";
 import getAllCustomers from "../service/get-customers";
 import deleteCustomer from "../service/delete-customer";
+import { filterCustomers, setCustomersList } from "../pages/home/customerListSlice";
+import { useDispatch } from "react-redux";
 
 const useFilterCustomers = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -9,57 +10,34 @@ const useFilterCustomers = () => {
   const [isCustomerActive, setIsCustomerActive] = useState<boolean>(true);
   const [selectedCustomer, setCustomer] = useState<string>("Active");
   const [selectedIndustry, setIndustry] = useState<string>("");
-  const [customersList, setCustomersList] = useState<[] | CustomerDataDto[]>(
-    []
-  );
-  const [filteredList, setFilteredList] = useState<[] | CustomerDataDto[]>([]);
-
-  const buildQuery = useCallback((): string => {
-    if (selectedIndustry === "") {
-      return `isActive=${isCustomerActive}`;
-    } else {
-      return `isActive=${isCustomerActive}&industry=${selectedIndustry}`;
-    }
-  }, [selectedIndustry, isCustomerActive]);
-
-  const filterCustomers = useCallback(async (query: string): Promise<void> => {
-
-    try {
-      setIsLoading(true);
-      const customers = await getAllCustomers(query);
-      setFilteredList(customers);
-      setIsLoading(false);
-    } catch (error: unknown) {
-      setHasError(true);
-    }
-  }, [buildQuery]);
+  
+  const dispatch = useDispatch();
 
   const fetchCustomers = useCallback(async (): Promise<void> => {
     const query = `isActive=${isCustomerActive}`;
 
     try {
       setIsLoading(true);
-
       const customers = await getAllCustomers(query);
-      setCustomersList(customers);
+      setIndustry("");
+      dispatch(setCustomersList(customers));
       setIsLoading(false);
     } catch (error: unknown) {
       setHasError(true);
     }
-  }, [isCustomerActive]);
+  }, [isCustomerActive, dispatch]);
 
   const deleteCustomerFromDb = useCallback(async (id: string) => {
-    const query = `isActive=${isCustomerActive}`;
 
     try {
       setIsLoading(true);
       await deleteCustomer(id);
-      filterCustomers(query)
+      fetchCustomers();
       setIsLoading(false);
     } catch (error: unknown) {
       setHasError(true);
     }
-  }, [filterCustomers]);
+  }, [fetchCustomers]);
 
   useEffect(() => {
     fetchCustomers();
@@ -67,11 +45,8 @@ const useFilterCustomers = () => {
 
 
   useEffect(() => {
-    const query = buildQuery();
-    filterCustomers(query);
-  }, [selectedIndustry, isCustomerActive, filterCustomers, buildQuery, deleteCustomerFromDb]);
-
-
+    dispatch(filterCustomers(selectedIndustry));
+  }, [selectedIndustry, dispatch]);
 
   useEffect(() => {
     if (selectedCustomer === "Inactive") {
@@ -79,20 +54,15 @@ const useFilterCustomers = () => {
     } else {
       setIsCustomerActive(true);
     }
-  }, [selectedCustomer, isCustomerActive, customersList]);
+  }, [selectedCustomer, isCustomerActive]);
 
   return {
-    customersList,
-    filteredList,
-    hasError,
-    isCustomerActive,
     isLoading,
-    selectedIndustry,
+    hasError,
     selectedCustomer,
+    selectedIndustry,
     setCustomer,
     setIndustry,
-    setFilteredList,
-    setIsCustomerActive,
     deleteCustomerFromDb,
   };
 };

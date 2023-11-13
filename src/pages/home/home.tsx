@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, Grid, IconButton } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
@@ -7,12 +7,12 @@ import Loading from "../../components/loading/Loading";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Filter from "../../components/filter/filter";
 import generateDropdownOptions from "../../utils/generateDropdownOptions";
-import useDeleteCustomer from "../../hooks/useDeleteCustomer";
 import useFilterCustomers from "../../hooks/useFilterCustomer";
+import { useSelector } from "react-redux";
+import { CustomerDataDto } from "../../dtos/customer-data-dto";
 import "./home.css";
 
 const Home = () => {
-  const navigate = useNavigate();
   const tableColumns: GridColDef[] = [
     { field: "company", headerName: "Company", minWidth: 250 },
     {
@@ -44,7 +44,7 @@ const Home = () => {
       field: "about",
       headerName: "About",
       headerAlign: "center",
-      minWidth: 600,
+      minWidth: 400,
       sortable: false,
       type: "number",
     },
@@ -62,43 +62,46 @@ const Home = () => {
             <Edit />
           </Link>
         ) : (
-          <IconButton onClick={() => {
-
-            deleteCustomerFromDb(params.row.id)
-            navigate("/")
-          }
-          }>
+          <IconButton
+            onClick={() => {
+              deleteCustomerFromDb(params.row.id);
+            }}
+          >
             <Delete />
           </IconButton>
         ),
     },
   ];
 
+  const filteredList: CustomerDataDto[] = useSelector((state: any) => {
+    return state.customers.filteredList;
+  });
+
+  const customerList: CustomerDataDto[] = useSelector((state: any) => {
+    return state.customers.customersList;
+  })
+
   const {
-    customersList,
-    hasError,
     isLoading,
-    filteredList,
+    hasError,
     selectedCustomer,
     selectedIndustry,
     setCustomer,
     setIndustry,
+    deleteCustomerFromDb,
   } = useFilterCustomers();
 
-  const {
-    deleteCustomerFromDb,
-    isLoading: isDeletingCustomer,
-    hasError: errorDeletingCustomer,
-  } = useDeleteCustomer();
-
   const activeCustomersDropdown = ["Active", "Inactive"];
+  
   const industriesDropdown = useMemo(() => {
-    return generateDropdownOptions(customersList);
-  }, [customersList]);
+    return generateDropdownOptions(customerList);
+  }, [customerList]);
 
-  if (hasError || errorDeletingCustomer) return <ErrorScreen />;
 
-  if (isLoading || isDeletingCustomer) return <Loading />;
+  if (hasError) return <ErrorScreen />;
+
+  if (isLoading) return <Loading />;
+
   return (
     <Grid container className="home-container">
       <Grid item xs={12}>
