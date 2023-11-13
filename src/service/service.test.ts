@@ -11,7 +11,7 @@ describe("Service", () => {
     const customersResponse = [
       {
         id: "40c0bad7-f1a6-4173-bd44-7ebef044905d",
-        isActive: false,
+        isActive: true,
         company: "Abbott, Olson and Moen",
         industry: "insurance",
         projects: [
@@ -65,10 +65,11 @@ describe("Service", () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
-    it("should call axios with the right endpoint to get all customers", async () => {
-      await getAllCustomersService();
+    it("should call axios with the right endpoint to get all Active customers", async () => {
+      const query = "isActive=true";
+      await getAllCustomersService(query);
       expect(axios.get).toHaveBeenCalledWith(
-        `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers`
+        `${process.env.REACT_APP_PORT_SERVER}/customers?isActive=true`
       );
     });
     it("should return the customer data from the response", async () => {
@@ -104,7 +105,7 @@ describe("Service", () => {
     it("should call axios with the right endpoint to get all customers", async () => {
       await getCustomerByIdService("40c0bad7-f1a6-4173-bd44-7ebef044905d");
       expect(axios.get).toHaveBeenCalledWith(
-        `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
+        `${process.env.REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`
       );
     });
     it("should return the customer data from the response", async () => {
@@ -142,8 +143,8 @@ describe("Service", () => {
     it("should call axios with the request body", async () => {
       await addNewCustomerService(requestMock);
       expect(axios.post).toHaveBeenCalledWith(
-        `${process.env.REACT_APP_REACT_APP_PORT_SERVER}/customers`,
-        { body: requestMock }
+        `${process.env.REACT_APP_PORT_SERVER}/customers`,
+        requestMock
       );
     });
   });
@@ -172,10 +173,13 @@ describe("Service", () => {
       jest.clearAllMocks();
     });
     it("should call axios with the request body", async () => {
-      await editCustomerService("40c0bad7-f1a6-4173-bd44-7ebef044905d", requestMock);
+      await editCustomerService(
+        "40c0bad7-f1a6-4173-bd44-7ebef044905d",
+        requestMock
+      );
       expect(axios.put).toHaveBeenCalledWith(
         `${process.env.REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`,
-        { body: requestMock }
+        requestMock
       );
     });
   });
@@ -186,7 +190,7 @@ describe("Service", () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
-    it("should call axios with the right endpoint to get all customers", async () => {
+    it("should call axios with the right endpoint to delete a customer", async () => {
       await deleteCustomerService("40c0bad7-f1a6-4173-bd44-7ebef044905d");
       expect(axios.delete).toHaveBeenCalledWith(
         `${process.env.REACT_APP_PORT_SERVER}/customers/40c0bad7-f1a6-4173-bd44-7ebef044905d`

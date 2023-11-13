@@ -58,11 +58,11 @@ const Home = () => {
       sortable: false,
       renderCell: (params) =>
         params.row.isActive ? (
-          <Link to={`/edit-customer/${params.row.id}`}>
+          <Link to={`/edit-customer/${params.row.id}`} aria-label="edit">
             <Edit />
           </Link>
         ) : (
-          <IconButton
+          <IconButton aria-label="delete"
             onClick={() => {
               deleteCustomerFromDb(params.row.id);
             }}
@@ -81,6 +81,7 @@ const Home = () => {
     return state.customers.customersList;
   })
 
+
   const {
     isLoading,
     hasError,
@@ -90,7 +91,7 @@ const Home = () => {
     setIndustry,
     deleteCustomerFromDb,
   } = useFilterCustomers();
-
+  console.log(isLoading, hasError, selectedCustomer, selectedIndustry, setCustomer, setIndustry, deleteCustomerFromDb)
   const activeCustomersDropdown = ["Active", "Inactive"];
   
   const industriesDropdown = useMemo(() => {
