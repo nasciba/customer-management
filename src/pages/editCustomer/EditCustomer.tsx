@@ -56,7 +56,7 @@ const EditCustomerPage = () => {
   if (isLoading) return <Loading />;
   if (hasError) return <ErrorScreen />;
   return (
-    <Box className="edit-page-padding" display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column">
       <Typography className="edit-page-title" variant="h4">Edit Customer</Typography>
       <Form
         customerInfo={customerInfo}

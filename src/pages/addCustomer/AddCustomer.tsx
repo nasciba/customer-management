@@ -35,8 +35,8 @@ const AddCustomer = () => {
   if(isLoading) return (<Loading/>)
   if(error) return (<ErrorScreen/>)
   return (
-    <Box className="padding" display="flex" flexDirection="column">
-      <Typography className="title" variant="h4">Add Customer</Typography>
+    <Box display="flex" flexDirection="column">
+      <Typography className="add-customer-title" variant="h4">Add Customer</Typography>
       <Form customerInfo={newCustomerInfo} reducer={addCustomer} handleSubmit={handleSubmit}/>
     
     </Box>
