@@ -130,33 +130,30 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
         </Grid>
         <Grid
           item
-          xs={12}
           md={2}
+          xs={12}
           display="flex"
           flexDirection="column"
+          alignItems="center"
           justifyContent="center"
         >
-          <Grid item xs={12} display="flex" justifyContent="center">
+          <Button
+            color="secondary"
+            className="form-button-style"
+            variant="contained"
+            onClick={() => handleSubmit()}
+          >
+            Submit
+          </Button>
+          <Link to="/">
             <Button
               color="secondary"
               className="form-button-style"
-              variant="contained"
-              onClick={() => handleSubmit()}
+              variant="outlined"
             >
-              Submit
+              Go back
             </Button>
-          </Grid>
-          <Grid item xs={12} display="flex" justifyContent="center">
-            <Link to="/">
-              <Button
-                color="secondary"
-                className="form-button-style"
-                variant="outlined"
-              >
-                Go back
-              </Button>
-            </Link>
-          </Grid>
+          </Link>
         </Grid>
       </Grid>
       <Grid container>
