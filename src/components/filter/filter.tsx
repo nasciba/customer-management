@@ -1,5 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import "./filter.css";
+import "./filter.scss";
 
 interface FilterProps {
   label: string;
@@ -17,16 +17,17 @@ const Filter = ({
   handleChange,
 }: FilterProps) => {
   return (
-    <FormControl variant="standard" sx={{ m: 1, minWidth: 250 }}>
+    <FormControl sx={{ m: 1, minWidth: 300 }}>
       <InputLabel id="demo-simple-select-standard-label">{label}</InputLabel>
       <Select
         labelId="demo-simple-select-standard-label"
         id="demo-simple-select-standard"
         defaultValue=""
+        placeholder="All"
         value={selectedOption}
         onChange={(event) => handleChange(event.target.value)}
         label={label}
-        className="capitalize-word"
+        className="filter-capitalize"
       >
         {displayAllOptions && (
           <MenuItem value="">
@@ -35,7 +36,7 @@ const Filter = ({
         )}
         {selectOptions.map((option) => {
           return (
-            <MenuItem className="capitalize-word" key={option} value={option}>
+            <MenuItem className="filter-capitalize" key={option} value={option}>
               {option}
             </MenuItem>
           );
