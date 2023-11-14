@@ -2,11 +2,12 @@ import { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { AnyAction } from "redux";
 import { Button, Grid, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
 import ProjectDetails from "./projectDetails/ProjectDetails";
 import { CustomerDataDto, ProjectInfo } from "../../dtos/customer-data-dto";
 import dayjs, { Dayjs } from "dayjs";
 import uuid from "react-uuid";
-import "./form.css";
+import "./form.scss";
 
 interface FormProps {
   customerInfo: CustomerDataDto;
@@ -14,11 +15,7 @@ interface FormProps {
   handleSubmit: () => void;
 }
 
-const Form = ({
-  customerInfo,
-  reducer,
-  handleSubmit,
-}: FormProps) => {
+const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
   const dispatch = useDispatch();
   const { about, company, industry, projects } = customerInfo;
   const handleInputChange = (
@@ -95,7 +92,7 @@ const Form = ({
   };
 
   return (
-    <Grid container>
+    <Grid container className="form-margin">
       <Grid container>
         <Grid display="flex" flexDirection="column" item xs={12} md={10}>
           <TextField
@@ -104,7 +101,7 @@ const Form = ({
             label="Company"
             variant="outlined"
             value={company}
-            className="input-margin"
+            className="form-input-margin"
             onChange={handleInputChange}
             inputProps={{ maxLength: 60 }}
           />
@@ -114,7 +111,7 @@ const Form = ({
             label="Industry"
             variant="outlined"
             value={industry}
-            className="input-margin"
+            className="form-input-margin"
             onChange={handleInputChange}
             inputProps={{ maxLength: 50 }}
           />
@@ -126,15 +123,40 @@ const Form = ({
             multiline
             rows={2}
             value={about}
-            className="input-margin"
+            className="form-input-margin"
             onChange={handleInputChange}
             inputProps={{ maxLength: 500 }}
           />
         </Grid>
-        <Grid item xs={12} md={2} display="flex" justifyContent="center">
-          <Button className="button-style" onClick={() => handleSubmit()}>
-            Submit
-          </Button>
+        <Grid
+          item
+          xs={12}
+          md={2}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Button
+              color="secondary"
+              className="form-button-style"
+              variant="contained"
+              onClick={() => handleSubmit()}
+            >
+              Submit
+            </Button>
+          </Grid>
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Link to="/">
+              <Button
+                color="secondary"
+                className="form-button-style"
+                variant="outlined"
+              >
+                Go back
+              </Button>
+            </Link>
+          </Grid>
         </Grid>
       </Grid>
       <Grid container>
@@ -151,9 +173,14 @@ const Form = ({
             />
           );
         })}
-        <Grid item xs={12}>
-          <Button className="button-style" onClick={() => handleAddProject()}>
-            Add project
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <Button
+            color="secondary"
+            variant="contained"
+            className="form-button-style"
+            onClick={() => handleAddProject()}
+          >
+            Add Project
           </Button>
         </Grid>
       </Grid>
