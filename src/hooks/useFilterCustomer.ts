@@ -21,9 +21,10 @@ const useFilterCustomers = () => {
       const customers = await getAllCustomersService(query);
       setIndustry("");
       dispatch(setCustomersList(customers));
-      setIsLoading(false);
     } catch (error: unknown) {
       setHasError(true);
+    }finally{
+      setIsLoading(false);
     }
   }, [isCustomerActive, dispatch]);
 
@@ -33,9 +34,11 @@ const useFilterCustomers = () => {
       setIsLoading(true);
       await deleteCustomerService(id);
       fetchCustomers();
-      setIsLoading(false);
     } catch (error: unknown) {
       setHasError(true);
+    }finally {
+      setIsLoading(false);
+
     }
   }, [fetchCustomers]);
 
@@ -48,13 +51,6 @@ const useFilterCustomers = () => {
     dispatch(filterCustomers(selectedIndustry));
   }, [selectedIndustry, dispatch]);
 
-  useEffect(() => {
-    if (selectedCustomer === "Inactive") {
-      setIsCustomerActive(false);
-    } else {
-      setIsCustomerActive(true);
-    }
-  }, [selectedCustomer, isCustomerActive]);
 
   return {
     isLoading,
@@ -62,6 +58,7 @@ const useFilterCustomers = () => {
     selectedCustomer,
     selectedIndustry,
     setCustomer,
+    setIsCustomerActive,
     setIndustry,
     deleteCustomerFromDb,
   };
