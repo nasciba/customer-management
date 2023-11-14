@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { editCustomer } from "./editCustomerSlice";
-import { Box } from "@mui/material";
-import Form from "../../components/form/form";
+import { Box, Typography } from "@mui/material";
+import Form from "../../components/form/Form";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Loading from "../../components/loading/Loading";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
 import getCustomerById from "../../service/getCustomer";
 import editCustomerService from "../../service/editCustomer";
-import "./editCustomer.css";
+import "./editCustomer.scss";
 
 const EditCustomerPage = () => {
   const dispatch = useDispatch();
@@ -26,33 +26,38 @@ const EditCustomerPage = () => {
     try {
       setIsLoading(true);
       await editCustomerService(id, customerInfo);
-      setIsLoading(false);
       navigate("/");
     } catch (error: unknown) {
       setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const getCustomer = async (id: string): Promise<void> => {
-    try {
-      setIsLoading(true);
-      const customer = await getCustomerById(id);
-      dispatch(editCustomer(customer));
-      setIsLoading(false);
-    } catch (error) {
-      setHasError(true);
-    }
-  };
+  const getCustomer = useCallback(
+    async (id: string): Promise<void> => {
+      try {
+        setIsLoading(true);
+        const customer = await getCustomerById(id);
+        dispatch(editCustomer(customer));
+      } catch (error) {
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     getCustomer(id);
-  }, []);
+  }, [id, getCustomer]);
 
   if (isLoading) return <Loading />;
   if (hasError) return <ErrorScreen />;
   return (
-    <Box className="padding" display="flex" flexDirection="column">
-      <h1 className="title">Edit Customer</h1>
+    <Box className="edit-page-padding" display="flex" flexDirection="column">
+      <Typography className="edit-page-title" variant="h4">Edit Customer</Typography>
       <Form
         customerInfo={customerInfo}
         reducer={editCustomer}
