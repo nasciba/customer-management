@@ -7,7 +7,7 @@ const generateDropdownOptions = (list: CustomerDataDto[]) => {
           index ===
           receivedList.findIndex(
             (listItem: CustomerDataDto) =>
-              listItem.industry === item.industry 
+              listItem.industry.toLowerCase() === item.industry.toLowerCase() 
           )
       )
       .map((item: CustomerDataDto) => item.industry).sort();
