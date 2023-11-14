@@ -1,0 +1,22 @@
+.project-details {
+  &-card {
+    width: 100%;
+  }
+
+  &-date.MuiTextField-root {
+    margin: 1em 1em 0.3em 0;
+  }
+
+  &-input.MuiTextField-root {
+    margin-top: 0.5em;
+  }
+
+  &-remove-button.MuiButtonBase-root {
+    width: 10em;
+    border-radius: 40px;
+    height: 3em;
+    margin: 1em;
+    font-weight: 600;
+    font-size: 14px;
+  }
+}

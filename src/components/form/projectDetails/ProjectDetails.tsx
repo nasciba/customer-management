@@ -1,11 +1,11 @@
-import { Grid, Button, TextField } from "@mui/material";
-import { ProjectInfo } from "../../../dtos/customer-data-dto";
 import { ChangeEvent } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Grid, Button, TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import "./projectDetails.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { ProjectInfo } from "../../../dtos/customer-data-dto";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+import "./projectDetails.scss";
 
 interface ProjectProps {
   project: ProjectInfo;
@@ -17,6 +17,7 @@ interface ProjectProps {
   handleDateChange: (value: Dayjs | null, name: string, index: number) => void;
   index: number;
 }
+
 const ProjectDetails = ({
   project,
   index,
@@ -28,7 +29,7 @@ const ProjectDetails = ({
   const projectNumber = index + 1;
 
   return (
-    <Grid container className="card" display="flex" flexDirection="column">
+    <Grid container className="project-details-card" display="flex" flexDirection="column">
       <h4>Project {projectNumber}</h4>
       <Grid container>
         <Grid item display="flex" flexDirection="column" xs={12} md={10}>
@@ -40,7 +41,7 @@ const ProjectDetails = ({
             variant="outlined"
             value={name}
             onChange={(event) => handleChangeProject(event, index)}
-            className="input-margin"
+            className="project-details-input"
           />
           <TextField
             id="contact"
@@ -51,12 +52,12 @@ const ProjectDetails = ({
             placeholder="email@email.com"
             value={contact ?? ""}
             onChange={(event) => handleChangeProject(event, index)}
-            className="input-margin"
+            className="project-details-input"
           />
           <Grid container>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
-                className="date-margin"
+                className="project-details-date"
                 label="Start Date"
                 value={dayjs(start_date ?? null)}
                 onChange={(newValue) =>
@@ -66,7 +67,7 @@ const ProjectDetails = ({
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
-                className="date-margin"
+                className="project-details-date"
                 label="End Date"
                 value={dayjs(end_date ?? null)}
                 views={["day", "month", "year"]}
@@ -79,9 +80,9 @@ const ProjectDetails = ({
         </Grid>
         <Grid item xs={12} md={2} display="flex" justifyContent="center">
           <Button
-            className="remove-button"
-            color="error"
-            variant="contained"
+            className="project-details-remove-button"
+            color="secondary"
+            variant="outlined"
             onClick={() => handleRemoveProject(index)}
           >
             Remove
