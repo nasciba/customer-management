@@ -29,7 +29,12 @@ const ProjectDetails = ({
   const projectNumber = index + 1;
 
   return (
-    <Grid container className="project-details-card" display="flex" flexDirection="column">
+    <Grid
+      container
+      className="project-details-card"
+      display="flex"
+      flexDirection="column"
+    >
       <h4>Project {projectNumber}</h4>
       <Grid container>
         <Grid item display="flex" flexDirection="column" xs={12} md={10}>
@@ -59,21 +64,23 @@ const ProjectDetails = ({
               <DesktopDatePicker
                 className="project-details-date"
                 label="Start Date"
-                value={dayjs(start_date ?? null)}
+                value={dayjs(start_date ?? undefined)}
                 onChange={(newValue) =>
                   handleDateChange(newValue, "start_date", index)
                 }
+                maxDate={dayjs(end_date)}
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
                 className="project-details-date"
                 label="End Date"
-                value={dayjs(end_date ?? null)}
+                value={dayjs(end_date ?? undefined)}
                 views={["day", "month", "year"]}
                 onChange={(newValue) =>
                   handleDateChange(newValue, "end_date", index)
                 }
+                minDate={dayjs(start_date)}
               />
             </LocalizationProvider>
           </Grid>

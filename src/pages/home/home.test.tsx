@@ -2,7 +2,7 @@
 import { screen } from "@testing-library/react";
 import Home from "./Home";
 import { renderWithProviders } from "../../utils/testUtils";
-import useFilterCustomers from "../../hooks/useFilterCustomer";
+import useFilterCustomers from "./useFilterCustomer";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 

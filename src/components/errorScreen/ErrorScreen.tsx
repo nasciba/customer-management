@@ -1,9 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./errorScreen.scss";
 
 const ErrorScreen = () => {
+  const location = useLocation();
+
   return (
     <Box
       width="100%"
@@ -20,9 +22,11 @@ const ErrorScreen = () => {
       <Typography className="error-screen-text" variant="h5">
         Please try again later.
       </Typography>
-      <Link to="/" className="error-screen-text">
-        Go back to home page
-      </Link>
+      {location.pathname !== "/" && (
+        <Link to="/" className="error-screen-text">
+          Go back to home page
+        </Link>
+      )}
     </Box>
   );
 };

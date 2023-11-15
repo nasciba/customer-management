@@ -6,12 +6,12 @@ import Loading from "../../components/loading/Loading";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Filter from "../../components/filter/filter";
 import generateDropdownOptions from "../../utils/generateDropdownOptions";
-import useFilterCustomers from "../../hooks/useFilterCustomer";
-import { useDispatch, useSelector } from "react-redux";
+import useFilterCustomers from "./useFilterCustomer";
+import { useSelector } from "react-redux";
 import { CustomerDataDto } from "../../dtos/customer-data-dto";
-import "./home.scss";
 import { Link } from "react-router-dom";
 import Dialog from "../../components/dialog/dialog";
+import "./home.scss";
 
 const Home = () => {
   const tableColumns: GridColDef[] = [
@@ -20,6 +20,7 @@ const Home = () => {
       field: "company",
       headerAlign: "center",
       headerName: "Company",
+      headerClassName: "home-table-header",
       flex: 0.15,
       renderCell: (params) => (
         <Tooltip title={params.value}>
@@ -33,6 +34,7 @@ const Home = () => {
       field: "industry",
       flex: 0.2,
       headerAlign: "center",
+      headerClassName: "home-table-header",
       headerName: "Industry",
       valueFormatter: (params) =>
         params.value?.charAt(0).toUpperCase() + params.value.slice(1),
@@ -42,6 +44,7 @@ const Home = () => {
       disableColumnMenu: true,
       field: "projects",
       flex: 0.05,
+      headerClassName: "home-table-header",
       headerName: "Projects",
       headerAlign: "center",
       minWidth: 200,
@@ -56,6 +59,7 @@ const Home = () => {
       disableColumnMenu: true,
       flex: 0.2,
       field: "about",
+      headerClassName: "home-table-header",
       headerName: "About",
       headerAlign: "center",
       minWidth: 400,
@@ -71,6 +75,7 @@ const Home = () => {
       align: "center",
       disableColumnMenu: true,
       field: "actions",
+      headerClassName: "home-table-header",
       headerName: "Actions",
       flex: 0.05,
       headerAlign: "center",
@@ -78,7 +83,7 @@ const Home = () => {
       renderCell: (params) =>
         params.row.isActive ? (
           <Link to={`/edit-customer/${params.row.id}`} aria-label="edit">
-            <Edit className="home-icon-color" />
+            <Edit color="secondary" />
           </Link>
         ) : (
           <IconButton
@@ -88,13 +93,12 @@ const Home = () => {
               setCustomerToDelete(params.row.id);
             }}
           >
-            <Delete className="home-icon-color" />
+            <Delete color="secondary"/>
           </IconButton>
         ),
     },
   ];
 
-  const dispatch = useDispatch();
   
   const filteredList: CustomerDataDto[] = useSelector((state: any) => {
     return state.customers.filteredList;

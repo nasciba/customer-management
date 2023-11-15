@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { filterCustomers, setCustomersList } from "../pages/home/customerListSlice";
-import getAllCustomersService from "../service/getCustomers";
-import deleteCustomerService from "../service/deleteCustomer";
+import { filterCustomers, setCustomersList } from "./customerListSlice";
+import getAllCustomersService from "../../service/getCustomers";
+import deleteCustomerService from "../../service/deleteCustomer";
 
 const useFilterCustomers = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

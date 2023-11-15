@@ -4,16 +4,6 @@
     overflow: hidden;
   }
 
-  &-container {
-    padding: 1em;
-  }
-
-  &-filter-container {
-    margin: 2em 0 1em;
-    display: flex;
-    align-items: center;
-  }
-
   &-button.MuiButtonBase-root {
     width: 12em;
     font-family: "Lexend", Sans-serif;
@@ -24,8 +14,14 @@
     font-size: 14px;
   }
 
-  &-icon-color {
-    color: #261a2f;
+  &-container {
+    padding: 1em;
+  }
+
+  &-filter-container {
+    margin: 2em 0 1em;
+    display: flex;
+    align-items: center;
   }
 
   &-table {
@@ -35,12 +31,19 @@
     width: 100%;
   }
 
+  &-table.MuiDataGrid-root .MuiDataGrid-columnHeaderTitle {
+    font-weight: 700;
+    color: #3a2e41;
+  }
+
   &-table.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
     outline: none !important;
   }
+
   &-table.MuiDataGrid-root .MuiDataGrid-cell:focus-within {
     outline: none !important;
   }
+
   &-title {
     text-align: center;
   }

@@ -1,12 +1,21 @@
 import { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { AnyAction } from "redux";
-import { Button, Grid, TextField } from "@mui/material";
+import {
+  Checkbox,
+  Button,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import ProjectDetails from "./projectDetails/ProjectDetails";
 import { CustomerDataDto, ProjectInfo } from "../../dtos/customer-data-dto";
 import dayjs, { Dayjs } from "dayjs";
 import uuid from "react-uuid";
+import { useFormik } from "formik";
+import FormSchema from "./validationSchema";
 import "./form.scss";
 
 interface FormProps {
@@ -17,10 +26,28 @@ interface FormProps {
 
 const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
   const dispatch = useDispatch();
-  const { about, company, industry, projects } = customerInfo;
+  const { about, company, industry, isActive, projects } = customerInfo;
+
+  const formik = useFormik({
+    initialValues: customerInfo,
+    validationSchema: FormSchema,
+    onSubmit: (values) => {
+      handleSubmit();
+    },
+  });
+
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    let form = { ...customerInfo };
+    form = { ...customerInfo, [name]: checked };
+
+    dispatch(reducer(form));
+  };
+
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    formik.handleChange(event);
     const { name, value } = event.target;
     let form = { ...customerInfo };
     form = { ...customerInfo, [name]: value };
@@ -93,94 +120,112 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
 
   return (
     <Grid container className="form-margin">
-      <Grid container>
-        <Grid display="flex" flexDirection="column" item xs={12} md={10}>
-          <TextField
-            id="company"
-            name="company"
-            label="Company"
-            variant="outlined"
-            value={company}
-            className="form-input-margin"
-            onChange={handleInputChange}
-            inputProps={{ maxLength: 60 }}
-          />
-          <TextField
-            id="industry"
-            name="industry"
-            label="Industry"
-            variant="outlined"
-            value={industry}
-            className="form-input-margin"
-            onChange={handleInputChange}
-            inputProps={{ maxLength: 50 }}
-          />
-          <TextField
-            id="about"
-            name="about"
-            label="About"
-            variant="outlined"
-            multiline
-            rows={2}
-            value={about}
-            className="form-input-margin"
-            onChange={handleInputChange}
-            inputProps={{ maxLength: 500 }}
-          />
-        </Grid>
-        <Grid
-          item
-          md={2}
-          xs={12}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Button
-            color="secondary"
-            className="form-button-style"
-            variant="contained"
-            onClick={() => handleSubmit()}
+      <form onSubmit={formik.handleSubmit} className="form-width">
+        <Grid container>
+          <Grid display="flex" flexDirection="column" item xs={12} md={10}>
+            <TextField
+              id="company"
+              name="company"
+              label="Company"
+              variant="outlined"
+              value={company}
+              className="form-input-margin"
+              onChange={handleInputChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.company && Boolean(formik.errors.company)}
+              helperText={formik.touched.company && formik.errors.company}
+            />
+            <TextField
+              id="industry"
+              name="industry"
+              label="Industry"
+              variant="outlined"
+              value={industry}
+              className="form-input-margin"
+              onChange={handleInputChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.industry && Boolean(formik.errors.industry)}
+              helperText={formik.touched.industry && formik.errors.industry}
+            />
+            <TextField
+              id="about"
+              name="about"
+              label="About"
+              variant="outlined"
+              multiline
+              rows={2}
+              value={about}
+              className="form-input-margin"
+              onChange={handleInputChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.about && Boolean(formik.errors.about)}
+              helperText={formik.touched.about && formik.errors.about}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="isActive"
+                  checked={isActive}
+                  onChange={handleCheckboxChange}
+                />
+              }
+              label="Active Customer"
+            />
+          </Grid>
+          <Grid
+            item
+            md={2}
+            xs={12}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
           >
-            Submit
-          </Button>
-          <Link to="/">
             <Button
               color="secondary"
               className="form-button-style"
-              variant="outlined"
+              variant="contained"
+              type="submit"
             >
-              Go back
+              Submit
             </Button>
-          </Link>
+            <Link to="/">
+              <Button
+                color="secondary"
+                className="form-button-style"
+                variant="outlined"
+              >
+                Go back
+              </Button>
+            </Link>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container>
-        <h3>Projects</h3>
-        {projects?.map((project: ProjectInfo, index: number) => {
-          return (
-            <ProjectDetails
-              key={project.id}
-              project={project}
-              handleChangeProject={handleChangeProject}
-              handleDateChange={handleDateChange}
-              handleRemoveProject={handleRemoveProject}
-              index={index}
-            />
-          );
-        })}
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <Button
-            color="secondary"
-            variant="contained"
-            className="form-button-style"
-            onClick={() => handleAddProject()}
-          >
-            Add Project
-          </Button>
+        <Grid container>
+          <h3>Projects</h3>
+          {projects?.map((project: ProjectInfo, index: number) => {
+            return (
+              <ProjectDetails
+                key={project.id}
+                project={project}
+                handleChangeProject={handleChangeProject}
+                handleDateChange={handleDateChange}
+                handleRemoveProject={handleRemoveProject}
+                index={index}
+              />
+            );
+          })}
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Button
+              color="secondary"
+              variant="contained"
+              className="form-button-style"
+              onClick={() => handleAddProject()}
+            >
+              Add Project
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      </form>
     </Grid>
   );
 };
