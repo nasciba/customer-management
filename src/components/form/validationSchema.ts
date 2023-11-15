@@ -13,21 +13,8 @@ const FormSchema = Yup.object().shape({
       .min(30, "Too short")
       .max(500, "Too long!")
       .required("Required"),
-    projects: Yup.array().of(
-      Yup.object().shape({
-        name: Yup.string()
-          .min(2, "Too Short!")
-          .max(30, "Too Long!")
-          .required("Required"),
-        contact: Yup.string()
-          .min(2, "Too Short!")
-          .max(30, "Too Long!")
-          .required("Required"),
-        start_date: Yup.string().required("Required"),
-        end_date: Yup.string().required("Required"),
-      })
-    ),
+
   });
-  
+
   export default FormSchema
   

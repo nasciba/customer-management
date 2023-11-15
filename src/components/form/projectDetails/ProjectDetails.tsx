@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { Grid, Button, TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -27,6 +27,7 @@ const ProjectDetails = ({
 }: ProjectProps) => {
   const { name, contact, start_date, end_date } = project;
   const projectNumber = index + 1;
+  const [touched, setTouched] = useState<boolean>(false);
 
   return (
     <Grid
@@ -47,6 +48,9 @@ const ProjectDetails = ({
             value={name}
             onChange={(event) => handleChangeProject(event, index)}
             className="project-details-input"
+            onBlur={() => setTouched(true)}
+            error={touched && !name}
+            helperText={touched && !name ? "Name is a required field." : null}
           />
           <TextField
             id="contact"
