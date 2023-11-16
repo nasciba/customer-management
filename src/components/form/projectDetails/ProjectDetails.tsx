@@ -50,7 +50,7 @@ const ProjectDetails = ({
     const { name, value } = event.target;
 
     let fieldName = name.split('.')[1];
-
+    
     updateProjectState({ property: fieldName, value, index });
   };
 
@@ -96,7 +96,7 @@ const ProjectDetails = ({
             label="Email"
             placeholder="email@email.com"
             variant="outlined"
-            value={contact?? ""}
+            defaultValue={contact ?? ""}
             onChange={(event) => handleChangeProject(event, index)}
             className="project-details-input"
             onBlur={onBlur}

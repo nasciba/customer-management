@@ -16,7 +16,6 @@ interface DialogProps {
   handleSubmit: () => Promise<void>;
 }
 const Dialog = ({
-  customerToDelete,
   open,
   text,
   title,
@@ -46,7 +45,7 @@ const Dialog = ({
           onClick={handleSubmit}
           autoFocus
         >
-          Agree
+          Confirm
         </Button>
       </DialogActions>
     </MuiDialog>

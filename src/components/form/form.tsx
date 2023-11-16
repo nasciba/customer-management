@@ -52,7 +52,7 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
     const { name, value } = event.target;
     let form = { ...customerInfo };
     form = { ...customerInfo, [name]: value };
-
+    
     dispatch(reducer(form));
   };
 

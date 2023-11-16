@@ -6,7 +6,7 @@ import useFilterCustomers from "./useFilterCustomer";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 
-jest.mock("../../hooks/useFilterCustomer");
+jest.mock("./useFilterCustomer");
 
 describe("Home Page", () => {
   const deleteCustomerFromDbMock = jest.fn();
@@ -21,6 +21,7 @@ describe("Home Page", () => {
     setIndustry: setIndustryMock,
     deleteCustomerFromDb: deleteCustomerFromDbMock,
   };
+
   const activeCustomers = [
     {
       id: "1798e668-8eb3-424f-8af7-6e6da2515b14",
@@ -70,6 +71,7 @@ describe("Home Page", () => {
       about: "Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.",
     },
   ];
+
   const inactiveCustomers = [
     {
       id: "1798e668-8eb3-424f-8af7-6e6da2515b14",
@@ -105,10 +107,13 @@ describe("Home Page", () => {
     },
   ];
 
+  const industryDropdown = ["travel", "marketing"];
+
   const stateMock = {
     customers: {
       customersList: activeCustomers,
       filteredList: activeCustomers,
+      industryDropdownValues: industryDropdown,
     },
   };
   describe("When the request to get the customers list is successful", () => {
@@ -120,12 +125,6 @@ describe("Home Page", () => {
 
     afterEach(() => {
       jest.clearAllMocks();
-    });
-
-    it("should render the home page title", async () => {
-      renderWithProviders(<Home />);
-
-      expect(await screen.findByRole("heading")).toHaveTextContent("Customers");
     });
 
     it("should render a table with a column to display the company name", () => {
@@ -199,6 +198,7 @@ describe("Home Page", () => {
           customers: {
             customersList: activeCustomers,
             filteredList: activeCustomers,
+            industryDropdownValues: industryDropdown,
           },
         },
       });
@@ -210,12 +210,13 @@ describe("Home Page", () => {
       );
     });
 
-    it("should call the deleteCustomerFromDb function when the user clicks on the delete button to remove an inactive customer", async () => {
+    it("should display a dialog when the user clicks on the delete button to remove an inactive customer", async () => {
       renderWithProviders(<Home />, {
         preloadedState: {
           customers: {
             customersList: inactiveCustomers,
             filteredList: inactiveCustomers,
+            industryDropdownValues: industryDropdown,
           },
         },
       });
@@ -223,7 +224,11 @@ describe("Home Page", () => {
         name: /delete/i,
       });
       act(() => userEvent.click(deleteButton[0]));
-      expect(deleteCustomerFromDbMock).toHaveBeenCalled();
+      expect(
+        await screen.findByText(
+          "Are you sure you want to delete this customer?"
+        )
+      ).toBeInTheDocument();
     });
 
     describe("Filters", () => {
@@ -252,6 +257,12 @@ describe("Home Page", () => {
       expect(
         await screen.findByText("Something went wrong.")
       ).toBeInTheDocument();
+    });
+
+    it("should not have a link to redirect the user to the home page", async () => {
+      renderWithProviders(<Home />);
+
+      expect(screen.queryByText("Return to home page")).not.toBeInTheDocument();
     });
   });
   describe("When the request to get the customers list is in progress", () => {

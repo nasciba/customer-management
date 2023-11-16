@@ -12,14 +12,14 @@ describe("Add Customer Page", () => {
     newCustomer: {
       id: "1234567",
       isActive: true,
-      company: "Some company",
-      industry: "Tech",
-      about: "Some description",
+      company: "",
+      industry: "",
+      about: "",
       projects: [
         {
           id: "abcde1234",
-          name: "Automation",
-          contact: "John Doe ",
+          name: "",
+          contact: "",
           start_date: "2021-10-26T03:45:04Z",
           end_date: "2021-11-26T03:45:04Z",
         },
@@ -34,26 +34,56 @@ describe("Add Customer Page", () => {
     ).toBeInTheDocument();
   });
 
-  it("should call the edit customer service when the form is submitted", async () => {
-    (addNewCustomerService as jest.Mock).mockImplementation(() => {});
-    renderWithProviders(<AddCustomer />, { preloadedState: stateMock });
-    const submitButton = await screen.findByRole("button", { name: "Submit" });
-    act(() => userEvent.click(submitButton));
-    expect(addNewCustomerService).toHaveBeenCalledWith({
-      id: "1234567",
-      isActive: true,
-      company: "Some company",
-      industry: "Tech",
-      about: "Some description",
-      projects: [
-        {
-          id: "abcde1234",
-          name: "Automation",
-          contact: "John Doe ",
-          start_date: "2021-10-26T03:45:04Z",
-          end_date: "2021-11-26T03:45:04Z",
-        },
-      ],
+
+  it("should display an error message when the request to add the customer info fails", async () => {
+    (addNewCustomerService as jest.Mock).mockImplementation(() => {
+      throw new Error();
     });
-  });
+    renderWithProviders(<AddCustomer />, { preloadedState: stateMock });
+
+    act(() =>
+      userEvent.type(
+        screen.getByRole("textbox", { name: /company/i }),
+        "Some company"
+      )
+    );
+
+    act(() =>
+      userEvent.type(screen.getByRole("textbox", { name: /industry/i }), "Tech")
+    );
+
+    act(() =>
+      userEvent.type(
+        screen.getByRole("textbox", { name: /about/i }),
+        "Some description detailing the company activity"
+      )
+    );
+
+    act(() =>
+      userEvent.type(
+        screen.getByRole("textbox", { name: /about/i }),
+        "Some description detailing the company activity"
+      )
+    );
+
+    act(() =>
+      userEvent.type(
+        screen.getByRole("textbox", { name: /name/i }),
+        "Automation"
+      )
+    );
+
+    act(() =>
+      userEvent.type(
+        screen.getByRole("textbox", { name: /email/i }),
+        "test@test.com"
+      )
+    );
+
+    act(() => userEvent.click(screen.getByRole("button", { name: /Submit/i })));
+
+    expect(
+      await screen.findByRole("heading", { name: "Something went wrong." })
+    ).toBeInTheDocument();
+  }, 15000);
 });

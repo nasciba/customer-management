@@ -4,7 +4,6 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 describe("Projects Component", () => {
-  const onChangeMock = jest.fn();
   const updateProjectState = jest.fn();
   const handleBlur = jest.fn();
   const handleRemoveProject = jest.fn();
@@ -17,12 +16,14 @@ describe("Projects Component", () => {
     start_date: null,
     end_date: null,
   };
-  const touched = {name: "", contact: "" ,  start_date: "", end_date: ""}
-  const errors = {name: "", contact: "" ,  start_date: "", end_date: ""}
-  it("should call the onchange function when the user types the project name", () => {
+  const touched = { name: "", contact: "", start_date: "", end_date: "" };
+  const errors = { name: "", contact: "", start_date: "", end_date: "" };
+
+  it("should display the value the user types for the project name", () => {
     render(
       <Project
-        project={projectMock} updateProjectState={updateProjectState}
+        project={projectMock}
+        updateProjectState={updateProjectState}
         handleChangeValidation={handleChangeValidation}
         handleRemoveProject={handleRemoveProject}
         index={0}
@@ -31,14 +32,14 @@ describe("Projects Component", () => {
         errors={errors}
       />
     );
-    const nameInput = screen.getByRole("textbox", { name: "Name" });
+    const nameInput = screen.getByRole("textbox", { name: "Project Name" });
     act(() => userEvent.type(nameInput, "some-name"));
-    expect(onChangeMock).toHaveBeenCalled();
+    expect(nameInput).toHaveValue("some-name");
   });
-  it("should call the onchange function when the user types the project contact", () => {
+  it("should display the value typed in the email(contact) field", () => {
     render(
       <Project
-        project={projectMock} 
+        project={projectMock}
         updateProjectState={updateProjectState}
         handleRemoveProject={handleRemoveProject}
         handleChangeValidation={handleChangeValidation}
@@ -48,14 +49,14 @@ describe("Projects Component", () => {
         index={0}
       />
     );
-    const contactInput = screen.getByRole("textbox", { name: "Contact" });
-    act(() => userEvent.type(contactInput, "some-contact"));
-    expect(onChangeMock).toHaveBeenCalled();
+    const emailInput = screen.getByRole("textbox", { name: "Email" });
+    act(() => userEvent.type(emailInput, "{backspace}some@email.com"));
+    expect(emailInput).toHaveValue("some@email.com");
   });
   it("should render an empty string when the project contact does not exist", () => {
     render(
       <Project
-        project={projectMock} 
+        project={projectMock}
         updateProjectState={updateProjectState}
         handleChangeValidation={handleChangeValidation}
         handleRemoveProject={handleRemoveProject}
@@ -65,12 +66,13 @@ describe("Projects Component", () => {
         index={0}
       />
     );
-    expect(screen.getByRole("textbox", { name: "Contact" })).toHaveValue("");
+    expect(screen.getByRole("textbox", { name: "Email" })).toHaveValue("");
   });
+  
   it("should call the onchange function when a date is typed in the start date field", () => {
     render(
       <Project
-        project={projectMock} 
+        project={projectMock}
         updateProjectState={updateProjectState}
         handleChangeValidation={handleChangeValidation}
         handleRemoveProject={handleRemoveProject}
@@ -84,10 +86,11 @@ describe("Projects Component", () => {
     act(() => userEvent.type(startDateInput, "01/10/2023"));
     //expect(handleProjectDateMock).toHaveBeenCalled();
   });
+
   it("should call the onchange function when a date is typed in the end date field", () => {
     render(
       <Project
-        project={projectMock}         
+        project={projectMock}
         updateProjectState={updateProjectState}
         handleChangeValidation={handleChangeValidation}
         handleRemoveProject={handleRemoveProject}
@@ -99,12 +102,12 @@ describe("Projects Component", () => {
     );
     const endDateInput = screen.getByRole("textbox", { name: "End Date" });
     act(() => userEvent.type(endDateInput, "01/11/2023"));
-   // expect(handleProjectDateMock).toHaveBeenCalled();
+    // expect(handleProjectDateMock).toHaveBeenCalled();
   });
   it("should call the handleRemoveProject function when the remove button is clicked", () => {
     render(
       <Project
-        project={projectMock} 
+        project={projectMock}
         updateProjectState={updateProjectState}
         handleChangeValidation={handleChangeValidation}
         handleRemoveProject={handleRemoveProject}
