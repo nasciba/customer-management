@@ -1,4 +1,4 @@
-export interface CustomerDataDto {
+export interface CustomerData {
   id?: string;
   isActive: boolean;
   company: string;

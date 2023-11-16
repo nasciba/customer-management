@@ -1,16 +1,15 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, Grid, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import Loading from "../../components/loading/Loading";
+import Dialog from "../../components/dialog/dialog";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Filter from "../../components/filter/filter";
-import generateDropdownOptions from "../../utils/generateDropdownOptions";
+import Loading from "../../components/loading/Loading";
 import useFilterCustomers from "./useFilterCustomer";
 import { useSelector } from "react-redux";
-import { CustomerDataDto } from "../../dtos/customer-data-dto";
 import { Link } from "react-router-dom";
-import Dialog from "../../components/dialog/dialog";
+import { CustomerData } from "../../types/customerData";
 import "./home.scss";
 
 const Home = () => {
@@ -77,7 +76,7 @@ const Home = () => {
       field: "actions",
       headerClassName: "home-table-header",
       headerName: "Actions",
-      flex: 0.05,
+      flex: 0.1,
       headerAlign: "center",
       sortable: false,
       renderCell: (params) =>
@@ -86,28 +85,31 @@ const Home = () => {
             <Edit color="secondary" />
           </Link>
         ) : (
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              setOpenDialog(true);
-              setCustomerToDelete(params.row.id);
-            }}
-          >
-            <Delete color="secondary"/>
-          </IconButton>
+          <>
+            <Link to={`/edit-customer/${params.row.id}`} aria-label="edit">
+              <Edit color="secondary" />
+            </Link>
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                setOpenDialog(true);
+                setCustomerToDelete(params.row.id);
+              }}
+            >
+              <Delete color="secondary" />
+            </IconButton>
+          </>
         ),
     },
   ];
 
-  
-  const filteredList: CustomerDataDto[] = useSelector((state: any) => {
+  const filteredList: CustomerData[] = useSelector((state: any) => {
     return state.customers.filteredList;
   });
 
-  const customerList: CustomerDataDto[] = useSelector((state: any) => {
-    return state.customers.customersList;
+  const industryDropdown = useSelector((state: any) => {
+    return state.customers.industryDropdownValues;
   });
-
   const {
     isLoading,
     hasError,
@@ -133,19 +135,17 @@ const Home = () => {
     setOpenDialog(false);
   }, [deleteCustomerFromDb, customerToDelete]);
 
-  const handleSelectCustomer = useCallback((value: string) => {
-    setCustomer(value);
-    if (value === "Inactive") {
-      setIsCustomerActive(false);
-    } else {
-      setIsCustomerActive(true);
-    }
-  }, [setCustomer, setIsCustomerActive]);
-
-
-  const industriesDropdown = useMemo(() => {
-    return generateDropdownOptions(customerList);
-  }, [customerList]);
+  const handleSelectCustomer = useCallback(
+    (value: string) => {
+      setCustomer(value);
+      if (value === "Inactive") {
+        setIsCustomerActive(false);
+      } else {
+        setIsCustomerActive(true);
+      }
+    },
+    [setCustomer, setIsCustomerActive]
+  );
 
   if (hasError) return <ErrorScreen />;
 
@@ -176,7 +176,7 @@ const Home = () => {
           displayAllOptions={false}
         />
         <Filter
-          selectOptions={industriesDropdown}
+          selectOptions={industryDropdown}
           handleChange={setIndustry}
           selectedOption={selectedIndustry}
           label="Industry"

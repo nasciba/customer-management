@@ -6,7 +6,7 @@ import { Box, Typography } from "@mui/material";
 import Form from "../../components/form/Form";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Loading from "../../components/loading/Loading";
-import { CustomerDataDto } from "../../dtos/customer-data-dto";
+import { CustomerData } from "../../types/customerData";
 import getCustomerById from "../../service/getCustomer";
 import editCustomerService from "../../service/editCustomer";
 import "./editCustomer.scss";
@@ -14,7 +14,7 @@ import "./editCustomer.scss";
 const EditCustomerPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const customerInfo: CustomerDataDto = useSelector((state: any) => {
+  const customerInfo: CustomerData = useSelector((state: any) => {
     return state.editCustomer;
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);

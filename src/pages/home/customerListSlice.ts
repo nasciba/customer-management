@@ -1,27 +1,47 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CustomerDataDto } from "../../dtos/customer-data-dto";
+import { CustomerData } from "../../types/customerData";
 
 const customersListSlice = createSlice({
   name: "customerList",
-  initialState: { customersList: [], filteredList: [] },
+  initialState: { customersList: [], filteredList: [], industryDropdownValues: [] },
   reducers: {
     setCustomersList(
       state: {
-        customersList: CustomerDataDto[];
-        filteredList: CustomerDataDto[];
+        customersList: CustomerData[];
+        filteredList: CustomerData[];
       },
-      action: { type: string; payload: CustomerDataDto[] }
+      action: { type: string; payload: CustomerData[] }
     ) {
       state.customersList = [];
       state.filteredList = [];
       Object.assign(state.customersList, action.payload);
       Object.assign(state.filteredList, action.payload);
-
+    },
+    generateIndustryDropdown(
+      state: { industryDropdownValues: string[] },
+      action: { type: string; payload: CustomerData[] }
+    ) {
+      const dropdownValues = action.payload
+        .filter(
+          (
+            item: CustomerData,
+            index: number,
+            receivedList: CustomerData[]
+          ) =>
+            index ===
+            receivedList.findIndex(
+              (listItem: CustomerData) =>
+                listItem.industry.toLowerCase() === item.industry.toLowerCase()
+            )
+        )
+        .map((item: CustomerData) => item.industry)
+        .sort();
+      state.industryDropdownValues = dropdownValues;
     },
     filterCustomers(
       state: {
-        customersList: CustomerDataDto[];
-        filteredList: CustomerDataDto[];
+        customersList: CustomerData[];
+        filteredList: CustomerData[];
       },
       action: { type: string; payload: string }
     ) {
@@ -38,6 +58,7 @@ const customersListSlice = createSlice({
   },
 });
 
+export const { generateIndustryDropdown } = customersListSlice.actions;
 export const { setCustomersList } = customersListSlice.actions;
 export const { filterCustomers } = customersListSlice.actions;
 

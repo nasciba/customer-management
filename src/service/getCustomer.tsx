@@ -1,7 +1,7 @@
 import axios from "axios";
-import { CustomerDataDto } from "../dtos/customer-data-dto";
+import { CustomerData } from "../types/customerData";
 
-const getCustomerByIdService = async (id: string) : Promise<CustomerDataDto>=> {
+const getCustomerByIdService = async (id: string) : Promise<CustomerData>=> {
     const response = await axios.get(`${process.env.REACT_APP_PORT_SERVER}/customers/${id}`);
     return response.data;
 }

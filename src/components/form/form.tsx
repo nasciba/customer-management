@@ -7,20 +7,19 @@ import {
   FormControlLabel,
   Grid,
   TextField,
-  Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ProjectDetails from "./projectDetails/ProjectDetails";
-import { CustomerDataDto, ProjectInfo } from "../../dtos/customer-data-dto";
-import dayjs, { Dayjs } from "dayjs";
+import { CustomerData, ProjectInfo } from "../../types/customerData";
 import uuid from "react-uuid";
 import { useFormik } from "formik";
-import FormSchema from "./validationSchema";
+import formSchema from "./validationSchema";
 import "./form.scss";
+import { UpdateProjectState } from "./types";
 
 interface FormProps {
-  customerInfo: CustomerDataDto;
-  reducer: (payload: CustomerDataDto) => AnyAction;
+  customerInfo: CustomerData;
+  reducer: (payload: CustomerData) => AnyAction;
   handleSubmit: () => void;
 }
 
@@ -28,10 +27,12 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
   const dispatch = useDispatch();
   const { about, company, industry, isActive, projects } = customerInfo;
 
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: customerInfo,
-    validationSchema: FormSchema,
-    onSubmit: (values) => {
+    validationSchema: formSchema,
+    onSubmit: () => {
       handleSubmit();
     },
   });
@@ -55,13 +56,13 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
     dispatch(reducer(form));
   };
 
-  interface UpdateState {
-    index: number;
-    property: string;
-    value: string;
-  }
-  const updateState = ({ property, value, index }: UpdateState) => {
+  const updateProjectState = ({
+    property,
+    value,
+    index,
+  }: UpdateProjectState) => {
     const updatedProjectsList: ProjectInfo[] = [...customerInfo.projects];
+
     updatedProjectsList[index] = {
       ...updatedProjectsList[index],
       [property]: value,
@@ -72,31 +73,8 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
     dispatch(reducer(form));
   };
 
-  const handleChangeProject = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    index: number
-  ) => {
-    const { name, value } = event.target;
-    updateState({ property: name, value, index });
-  };
-
-  const handleDateChange = (
-    value: Dayjs | null,
-    name: string,
-    index: number
-  ) => {
-    if (value?.isValid()) {
-      const dateString = dayjs(value).toISOString();
-      updateState({ property: name, value: dateString, index });
-    }
-    if (value === null) {
-      updateState({ property: name, value: "", index });
-    }
-  };
-
-  const handleAddProject = () => {
+  const handleAddProject = () : void => {
     let projects: ProjectInfo[] = [...customerInfo.projects];
-
     const project: ProjectInfo = {
       id: uuid(),
       name: "",
@@ -106,6 +84,8 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
     };
 
     projects.push(project);
+    
+    formik.setFieldValue("projects", projects);
 
     dispatch(reducer({ ...customerInfo, projects }));
   };
@@ -114,6 +94,8 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
     let projects: ProjectInfo[] = [...customerInfo.projects];
 
     projects.splice(index, 1);
+
+    formik.setFieldValue("projects", projects);
 
     dispatch(reducer({ ...customerInfo, projects }));
   };
@@ -189,15 +171,14 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
             >
               Submit
             </Button>
-            <Link to="/">
-              <Button
-                color="secondary"
-                className="form-button-style"
-                variant="outlined"
-              >
-                Go back
-              </Button>
-            </Link>
+            <Button
+              color="secondary"
+              className="form-button-style"
+              variant="outlined"
+              onClick={() => navigate(-1)}
+            >
+              Go back
+            </Button>
           </Grid>
         </Grid>
         <Grid container>
@@ -207,10 +188,13 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
               <ProjectDetails
                 key={project.id}
                 project={project}
-                handleChangeProject={handleChangeProject}
-                handleDateChange={handleDateChange}
+                updateProjectState={updateProjectState}
                 handleRemoveProject={handleRemoveProject}
                 index={index}
+                onBlur={formik.handleBlur}
+                handleChangeValidation={formik.handleChange}
+                touched={formik.touched?.projects?.[index]}
+                errors={formik.errors?.projects?.[index]}
               />
             );
           })}

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import uuid from "react-uuid";
-import { ProjectInfo, CustomerDataDto } from "../../dtos/customer-data-dto";
+import { ProjectInfo, CustomerData } from "../../types/customerData";
 
 const addNewCustomerSlice = createSlice({
   name: "newCustomer",
@@ -21,8 +21,8 @@ const addNewCustomerSlice = createSlice({
   },
   reducers: {
     addCustomer(
-      state: CustomerDataDto,
-      action: { type: string; payload: CustomerDataDto }
+      state: CustomerData,
+      action: { type: string; payload: CustomerData }
     ) {
       Object.assign(state, action.payload);
     },
