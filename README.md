@@ -1,21 +1,22 @@
-# Getting Started with Create React App
+# Customer Management
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was created with `create-react-app`. To get started, follow the commands below:
 
-## Available Scripts
+### `npm install`
+Installs the project dependencies.
 
-In the project directory, you can run:
+After installing the dependencies, make a copy of `env.example` and create a new file `.env`.
 
 ### `npm run server`
-Runs the server locally on port 8000. You should also create an .env file and to set the environment variable for the port. Check `.env.example`
+Runs the server locally on port 8000.
 
 ### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Other Available Scripts
+In the project directory, you can run:
 
 ### `npm test`
 
