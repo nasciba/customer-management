@@ -2,11 +2,12 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./filter.scss";
 
 interface FilterProps {
+  fullwidth?: boolean;
   label: string;
   selectOptions: string[];
   selectedOption: string;
   handleChange: (option: string) => void;
-  displayAllOptions: boolean;
+  displayAllOptions?: boolean;
 }
 
 const Filter = ({
@@ -17,7 +18,7 @@ const Filter = ({
   handleChange,
 }: FilterProps) => {
   return (
-    <FormControl sx={{ m: 1, minWidth: 300 }}>
+    <FormControl sx={{ m: 1, minWidth: 220 }}>
       <InputLabel id="demo-simple-select-standard-label">{label}</InputLabel>
       <Select
         labelId="demo-simple-select-standard-label"

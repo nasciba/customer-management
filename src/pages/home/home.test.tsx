@@ -1,12 +1,10 @@
-/* eslint-disable testing-library/no-unnecessary-act */
 import { screen } from "@testing-library/react";
 import Home from "./Home";
 import { renderWithProviders } from "../../utils/testUtils";
-import useFilterCustomers from "./useFilterCustomer";
+import useFilterCustomers from "./useFilterCustomers";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
 
-jest.mock("./useFilterCustomer");
+jest.mock("./useFilterCustomers");
 
 describe("Home Page", () => {
   const deleteCustomerFromDbMock = jest.fn();
@@ -126,111 +124,157 @@ describe("Home Page", () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
-
-    it("should render a table with a column to display the company name", () => {
-      renderWithProviders(<Home />);
-      const tableColumn = screen.getByRole("columnheader", { name: "Company" });
-      expect(tableColumn).toBeInTheDocument();
-    });
-    it("should render a table with a column to display the industry", () => {
-      renderWithProviders(<Home />);
-      const tableColumn = screen.getByRole("columnheader", {
-        name: "Industry",
+    describe("Table", () => {
+      it("should render a table with a column to display the company name", () => {
+        renderWithProviders(<Home />);
+        const tableColumn = screen.getByRole("columnheader", {
+          name: "Company",
+        });
+        expect(tableColumn).toBeInTheDocument();
       });
-      expect(tableColumn).toBeInTheDocument();
-    });
-    it("should render a table with a column to display the number of projects", () => {
-      renderWithProviders(<Home />);
-      const tableColumn = screen.getByRole("columnheader", {
-        name: "Projects",
+      it("should render a table with a column to display the industry", () => {
+        renderWithProviders(<Home />);
+        const tableColumn = screen.getByRole("columnheader", {
+          name: "Industry",
+        });
+        expect(tableColumn).toBeInTheDocument();
       });
-      expect(tableColumn).toBeInTheDocument();
-    });
-    it("should render a table with a column to display information about the customer", () => {
-      renderWithProviders(<Home />);
-      const tableColumn = screen.getByRole("columnheader", { name: "About" });
-      expect(tableColumn).toBeInTheDocument();
-    });
-    it("should render a table with a column to display the about section", () => {
-      renderWithProviders(<Home />);
-      const tableColumn = screen.getByRole("columnheader", { name: "Actions" });
-      expect(tableColumn).toBeInTheDocument();
-    });
-    it("should render the customer name correctly", async () => {
-      renderWithProviders(<Home />, { preloadedState: stateMock });
+      it("should render a table with a column to display the number of projects", () => {
+        renderWithProviders(<Home />);
+        const tableColumn = screen.getByRole("columnheader", {
+          name: "Projects",
+        });
+        expect(tableColumn).toBeInTheDocument();
+      });
+      it("should render a table with a column to display information about the customer", () => {
+        renderWithProviders(<Home />);
+        const tableColumn = screen.getByRole("columnheader", { name: "About" });
+        expect(tableColumn).toBeInTheDocument();
+      });
+      it("should render a table with a column to display the about section", () => {
+        renderWithProviders(<Home />);
+        const tableColumn = screen.getByRole("columnheader", {
+          name: "Actions",
+        });
+        expect(tableColumn).toBeInTheDocument();
+      });
+      it("should render the customer name correctly in the table", async () => {
+        renderWithProviders(<Home />, { preloadedState: stateMock });
 
-      expect(
-        await screen.findByRole("columnheader", { name: "Company" })
-      ).toBeInTheDocument();
-    });
-    it("should render the company name correctly in the table", async () => {
-      renderWithProviders(<Home />, { preloadedState: stateMock });
+        expect(
+          await screen.findByRole("columnheader", { name: "Company" })
+        ).toBeInTheDocument();
+      });
+      it("should render the company name correctly in the table", async () => {
+        renderWithProviders(<Home />, { preloadedState: stateMock });
 
-      expect(
-        await screen.findByRole("cell", { name: "Doyle-Kessler" })
-      ).toBeInTheDocument();
-    });
-    it("should render the industry name correctly in the table", async () => {
-      renderWithProviders(<Home />, { preloadedState: stateMock });
+        expect(
+          await screen.findByRole("cell", { name: "Doyle-Kessler" })
+        ).toBeInTheDocument();
+      });
+      it("should render the industry name correctly in the table", async () => {
+        renderWithProviders(<Home />, { preloadedState: stateMock });
 
-      expect(
-        await screen.findByRole("cell", { name: "Travel" })
-      ).toBeInTheDocument();
-    });
-    it("should render the number of projects correctly in the table", async () => {
-      renderWithProviders(<Home />, { preloadedState: stateMock });
+        expect(
+          await screen.findByRole("cell", { name: "Travel" })
+        ).toBeInTheDocument();
+      });
+      it("should render the number of projects correctly in the table", async () => {
+        renderWithProviders(<Home />, { preloadedState: stateMock });
 
-      expect(
-        await screen.findByRole("cell", { name: "1" })
-      ).toBeInTheDocument();
-    });
+        expect(
+          await screen.findByRole("cell", { name: "1" })
+        ).toBeInTheDocument();
+      });
 
-    it("should render a button to add a new customer with a link to redirect the user to the create customer page", async () => {
-      renderWithProviders(<Home />);
+      it("should render a button to add a new customer with a link to redirect the user to the create customer page", async () => {
+        renderWithProviders(<Home />);
 
-      expect(
-        await screen.findByRole("link", { name: "Add Customer" })
-      ).toHaveAttribute("href", "/add-customer");
-    });
-    it("should render a button to edit a customer with a link to redirect the user to the edit page", async () => {
-      renderWithProviders(<Home />, {
-        preloadedState: {
-          customers: {
-            customersList: activeCustomers,
-            filteredList: activeCustomers,
-            industryDropdownValues: industryDropdown,
+        expect(
+          await screen.findByRole("link", { name: "Add Customer" })
+        ).toHaveAttribute("href", "/add-customer");
+      });
+      it("should render a button to edit a customer with a link to redirect the user to the edit page", async () => {
+        renderWithProviders(<Home />, {
+          preloadedState: {
+            customers: {
+              customersList: activeCustomers,
+              filteredList: activeCustomers,
+              industryDropdownValues: industryDropdown,
+            },
           },
-        },
+        });
+        const editButton = await screen.findAllByRole("link", {
+          name: /edit/i,
+        });
+
+        expect(editButton[0]).toHaveAttribute(
+          "href",
+          "/edit-customer/1798e668-8eb3-424f-8af7-6e6da2515b14"
+        );
       });
-      const editButton = await screen.findAllByRole("link", { name: /edit/i });
-
-      expect(editButton[0]).toHaveAttribute(
-        "href",
-        "/edit-customer/1798e668-8eb3-424f-8af7-6e6da2515b14"
-      );
     });
-
-    it("should display a dialog when the user clicks on the delete button to remove an inactive customer", async () => {
-      renderWithProviders(<Home />, {
-        preloadedState: {
-          customers: {
-            customersList: inactiveCustomers,
-            filteredList: inactiveCustomers,
-            industryDropdownValues: industryDropdown,
+    describe("Deleting an inactive customer", () => {
+      it("should display a dialog when the user clicks on the delete button to remove an inactive customer", async () => {
+        renderWithProviders(<Home />, {
+          preloadedState: {
+            customers: {
+              customersList: inactiveCustomers,
+              filteredList: inactiveCustomers,
+              industryDropdownValues: industryDropdown,
+            },
           },
-        },
+        });
+        const deleteButton = await screen.findAllByRole("button", {
+          name: /delete/i,
+        });
+        userEvent.click(deleteButton[0]);
+        expect(
+          await screen.findByText(
+            "Are you sure you want to delete this customer?"
+          )
+        ).toBeInTheDocument();
       });
-      const deleteButton = await screen.findAllByRole("button", {
-        name: /delete/i,
-      });
-      act(() => userEvent.click(deleteButton[0]));
-      expect(
-        await screen.findByText(
-          "Are you sure you want to delete this customer?"
-        )
-      ).toBeInTheDocument();
-    });
 
+      it("should call deleCustomerFromDb when the user click the confirm button on the dialog", async () => {
+        renderWithProviders(<Home />, {
+          preloadedState: {
+            customers: {
+              customersList: inactiveCustomers,
+              filteredList: inactiveCustomers,
+              industryDropdownValues: industryDropdown,
+            },
+          },
+        });
+        const deleteButton = await screen.findAllByRole("button", {
+          name: /delete/i,
+        });
+        userEvent.click(deleteButton[0]);
+        userEvent.click(screen.getByRole("button", { name: /confirm/i }));
+
+        expect(deleteCustomerFromDbMock).toHaveBeenCalled();
+      });
+      it("should hide the dialog when the user click the cancel button on the dialog", async () => {
+        renderWithProviders(<Home />, {
+          preloadedState: {
+            customers: {
+              customersList: inactiveCustomers,
+              filteredList: inactiveCustomers,
+              industryDropdownValues: industryDropdown,
+            },
+          },
+        });
+        const deleteButton = await screen.findAllByRole("button", {
+          name: /delete/i,
+        });
+        userEvent.click(deleteButton[0]);
+        userEvent.click(screen.getByRole("button", { name: /cancel/i }));
+        
+        expect(
+          screen.queryByText("Are you sure you want to delete this?")
+        ).not.toBeInTheDocument();
+      });
+    });
     describe("Filters", () => {
       it("should render a filter with the default value Active to filter customers", async () => {
         renderWithProviders(<Home />);

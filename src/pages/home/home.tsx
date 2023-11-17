@@ -6,11 +6,12 @@ import Dialog from "../../components/dialog/dialog";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Filter from "../../components/filter/filter";
 import Loading from "../../components/loading/Loading";
-import useFilterCustomers from "./useFilterCustomer";
+import useFilterCustomers from "./useFilterCustomers";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CustomerData } from "../../types/customerData";
 import "./home.scss";
+import { StoreState } from "../../types/store";
 
 const Home = () => {
   const tableColumns: GridColDef[] = [
@@ -20,7 +21,7 @@ const Home = () => {
       headerAlign: "center",
       headerName: "Company",
       headerClassName: "home-table-header",
-      flex: 0.15,
+      minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value}>
           <div className="home-about-text">{params.value}</div>
@@ -31,7 +32,7 @@ const Home = () => {
       align: "center",
       disableColumnMenu: true,
       field: "industry",
-      flex: 0.2,
+      minWidth: 200,
       headerAlign: "center",
       headerClassName: "home-table-header",
       headerName: "Industry",
@@ -76,7 +77,7 @@ const Home = () => {
       field: "actions",
       headerClassName: "home-table-header",
       headerName: "Actions",
-      flex: 0.1,
+      minWidth: 100,
       headerAlign: "center",
       sortable: false,
       renderCell: (params) =>
@@ -103,11 +104,11 @@ const Home = () => {
     },
   ];
 
-  const filteredList: CustomerData[] = useSelector((state: any) => {
+  const filteredList: CustomerData[] = useSelector((state: StoreState) => {
     return state.customers.filteredList;
   });
 
-  const industryDropdown = useSelector((state: any) => {
+  const industryDropdown = useSelector((state: StoreState) => {
     return state.customers.industryDropdownValues;
   });
   const {

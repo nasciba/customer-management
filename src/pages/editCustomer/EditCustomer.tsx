@@ -9,12 +9,13 @@ import Loading from "../../components/loading/Loading";
 import { CustomerData } from "../../types/customerData";
 import getCustomerById from "../../service/getCustomer";
 import editCustomerService from "../../service/editCustomer";
+import { StoreState } from "../../types/store";
 import "./editCustomer.scss";
 
 const EditCustomerPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const customerInfo: CustomerData = useSelector((state: any) => {
+  const customerData: CustomerData = useSelector((state: StoreState) => {
     return state.editCustomer;
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -25,7 +26,7 @@ const EditCustomerPage = () => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await editCustomerService(id, customerInfo);
+      await editCustomerService(id, customerData);
       navigate("/");
     } catch (error: unknown) {
       setHasError(true);
@@ -59,7 +60,7 @@ const EditCustomerPage = () => {
     <Box display="flex" flexDirection="column">
       <Typography className="edit-page-title" variant="h4">Edit Customer</Typography>
       <Form
-        customerInfo={customerInfo}
+        customerData={customerData}
         reducer={editCustomer}
         handleSubmit={handleSubmit}
       />

@@ -1,5 +1,4 @@
 import React, { lazy, Suspense } from "react";
-import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import theme from "./Theme";

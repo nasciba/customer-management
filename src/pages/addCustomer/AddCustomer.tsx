@@ -8,12 +8,13 @@ import addNewCustomer from "../../service/addNewCustomer";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Loading from "../../components/loading/Loading";
 import Form from "../../components/form/Form";
+import { StoreState } from "../../types/store";
 import "./addCustomer.scss"
 
 const AddCustomer = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setHasError] = useState<boolean>(false);
-  const newCustomerInfo: CustomerData = useSelector((state: any) => {
+  const customerData: CustomerData = useSelector((state: StoreState) => {
     return state.newCustomer;
   });
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AddCustomer = () => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await addNewCustomer(newCustomerInfo);
+      await addNewCustomer(customerData);
       navigate("/");
     }
     catch(error: unknown) {
@@ -37,7 +38,7 @@ const AddCustomer = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Typography className="add-customer-title" variant="h4">Add Customer</Typography>
-      <Form customerInfo={newCustomerInfo} reducer={addCustomer} handleSubmit={handleSubmit}/>
+      <Form customerData={customerData} reducer={addCustomer} handleSubmit={handleSubmit}/>
     </Box>
   );
 };

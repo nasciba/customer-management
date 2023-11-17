@@ -38,7 +38,6 @@ const ProjectDetails = ({
   handleRemoveProject,
   onBlur,
 }: ProjectProps) => {
-
   const { name, contact, start_date, end_date } = project;
   const projectNumber = index + 1;
 
@@ -49,8 +48,8 @@ const ProjectDetails = ({
     handleChangeValidation(event);
     const { name, value } = event.target;
 
-    let fieldName = name.split('.')[1];
-    
+    let fieldName = name.split(".")[1];
+
     updateProjectState({ property: fieldName, value, index });
   };
 

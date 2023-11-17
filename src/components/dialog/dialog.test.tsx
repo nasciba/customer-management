@@ -1,10 +1,9 @@
-/* eslint-disable testing-library/no-unnecessary-act */
 import Dialog from "./dialog";
 import {
-  fireEvent,
   render,
   screen,
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 describe("Dialog", () => {
   const handleClose = jest.fn();
@@ -29,13 +28,13 @@ describe("Dialog", () => {
   });
   it("should call handleClose when the cancel button is clicked", () => {
     render(<Dialog {...dialogProps} />);
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    userEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(handleClose).toHaveBeenCalled();
   });
 
   it("should call handleSubmit when the confirm button is clicked", async () => {
     render(<Dialog {...dialogProps} />);
-    fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
+    userEvent.click(screen.getByRole("button", { name: "Confirm" }));
     expect(handleSubmit).toHaveBeenCalled();
   });
 });

@@ -1,9 +1,8 @@
-/* eslint-disable testing-library/no-unnecessary-act */
-import { act, fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "../../utils/testUtils";
 import Form from "./Form";
 import { CustomerData } from "../../types/customerData";
-import userEvent from "@testing-library/user-event";
 
 describe("Form Component", () => {
   const reducerMock = jest.fn();
@@ -31,49 +30,48 @@ describe("Form Component", () => {
         },
       }));
     });
-    it("should call the handle change function when a value is typed in the company field", () => {
+    it("should call the handle change function when a value is typed in the company field", async () => {
       renderWithProviders(
         <Form
-          customerInfo={customerDataMock}
+          customerData={customerDataMock}
           reducer={reducerMock}
           handleSubmit={handleSubmitMock}
         />
       );
 
-      act(() =>
-        userEvent.type(
-          screen.getByRole("textbox", { name: "Company" }),
-          "Some company"
-        )
+      userEvent.type(
+        screen.getByRole("textbox", { name: "Company" }),
+        "Some company"
       );
+
       expect(reducerMock).toHaveBeenCalled();
     });
-    it("should call the handle change function when a value is typed in the industry field", () => {
+    it("should call the handle change function when a value is typed in the industry field", async () => {
       renderWithProviders(
         <Form
-          customerInfo={customerDataMock}
+          customerData={customerDataMock}
           reducer={reducerMock}
           handleSubmit={handleSubmitMock}
         />
       );
-      act(() =>
-        userEvent.type(
-          screen.getByRole("textbox", { name: "Industry" }),
-          "Tech"
-        )
+
+      userEvent.type(
+        await screen.findByRole("textbox", { name: "Industry" }),
+        "Tech"
       );
+
       expect(reducerMock).toHaveBeenCalled();
     });
     it("should mark the checkbox as checked when the isActive field is true", () => {
       renderWithProviders(
         <Form
-          customerInfo={customerDataMock}
+          customerData={customerDataMock}
           reducer={reducerMock}
           handleSubmit={handleSubmitMock}
         />
       );
 
-      fireEvent.click(
+      userEvent.click(
         screen.getByRole("checkbox", { name: "Active Customer" })
       );
 
@@ -84,17 +82,15 @@ describe("Form Component", () => {
     it("should call the handle change function when a value is typed in the about field", () => {
       renderWithProviders(
         <Form
-          customerInfo={customerDataMock}
+          customerData={customerDataMock}
           reducer={reducerMock}
           handleSubmit={handleSubmitMock}
         />
       );
 
-      act(() =>
-        userEvent.type(
-          screen.getByRole("textbox", { name: "About" }),
-          "Some description detailing the company activities"
-        )
+      userEvent.type(
+        screen.getByRole("textbox", { name: "About" }),
+        "Some description detailing the company activities"
       );
 
       expect(reducerMock).toHaveBeenCalled();
@@ -118,7 +114,7 @@ describe("Form Component", () => {
     it("should render a title for the projects section", () => {
       renderWithProviders(
         <Form
-          customerInfo={customerDataMock}
+          customerData={customerDataMock}
           reducer={reducerMock}
           handleSubmit={handleSubmitMock}
         />
@@ -142,16 +138,16 @@ describe("Form Component", () => {
       };
       renderWithProviders(
         <Form
-          customerInfo={customerDataMock}
+          customerData={customerDataMock}
           reducer={reducerMock}
           handleSubmit={handleSubmitMock}
         />
       );
-      fireEvent.click(screen.getByRole("button", { name: "Add Project" }));
+      userEvent.click(screen.getByRole("button", { name: "Add Project" }));
       expect(reducerMock).toHaveBeenCalledWith(updatedCustomerData);
     });
     it("should call the reducer to delete a project when the delete button is clicked", () => {
-      const customerInfoMock: CustomerData = {
+      const customerData: CustomerData = {
         ...customerDataMock,
         projects: [
           {
@@ -165,12 +161,12 @@ describe("Form Component", () => {
       };
       renderWithProviders(
         <Form
-          customerInfo={customerInfoMock}
+          customerData={customerData}
           reducer={reducerMock}
           handleSubmit={handleSubmitMock}
         />
       );
-      fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+      userEvent.click(screen.getByRole("button", { name: "Remove" }));
       expect(reducerMock).toHaveBeenCalledWith({
         id: "",
         isActive: true,

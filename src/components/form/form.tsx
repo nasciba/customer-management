@@ -11,36 +11,44 @@ import {
 import { useNavigate } from "react-router-dom";
 import ProjectDetails from "./projectDetails/ProjectDetails";
 import { CustomerData, ProjectInfo } from "../../types/customerData";
-import uuid from "react-uuid";
 import { useFormik } from "formik";
 import formSchema from "./validationSchema";
-import "./form.scss";
 import { UpdateProjectState } from "./types";
+import uuid from "react-uuid";
+import "./form.scss";
 
 interface FormProps {
-  customerInfo: CustomerData;
+  customerData: CustomerData;
   reducer: (payload: CustomerData) => AnyAction;
   handleSubmit: () => void;
 }
 
-const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
+const Form = ({ customerData, reducer, handleSubmit }: FormProps) => {
   const dispatch = useDispatch();
-  const { about, company, industry, isActive, projects } = customerInfo;
+  const { about, company, industry, isActive, projects } = customerData;
 
   const navigate = useNavigate();
 
   const formik = useFormik({
-    initialValues: customerInfo,
+    initialValues: customerData,
     validationSchema: formSchema,
     onSubmit: () => {
       handleSubmit();
     },
   });
+  const {
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit: handleSubmitFormik,
+    setFieldValue,
+  } = formik;
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
-    let form = { ...customerInfo };
-    form = { ...customerInfo, [name]: checked };
+    let form = { ...customerData };
+    form = { ...customerData, [name]: checked };
 
     dispatch(reducer(form));
   };
@@ -48,11 +56,11 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    formik.handleChange(event);
+    handleChange(event);
     const { name, value } = event.target;
-    let form = { ...customerInfo };
-    form = { ...customerInfo, [name]: value };
-    
+    let form = { ...customerData };
+    form = { ...customerData, [name]: value };
+
     dispatch(reducer(form));
   };
 
@@ -61,20 +69,20 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
     value,
     index,
   }: UpdateProjectState) => {
-    const updatedProjectsList: ProjectInfo[] = [...customerInfo.projects];
+    const updatedProjectsList: ProjectInfo[] = [...customerData.projects];
 
     updatedProjectsList[index] = {
       ...updatedProjectsList[index],
       [property]: value,
     };
 
-    const form = { ...customerInfo, projects: updatedProjectsList };
+    const form = { ...customerData, projects: updatedProjectsList };
 
     dispatch(reducer(form));
   };
 
-  const handleAddProject = () : void => {
-    let projects: ProjectInfo[] = [...customerInfo.projects];
+  const handleAddProject = (): void => {
+    let projects: ProjectInfo[] = [...customerData.projects];
     const project: ProjectInfo = {
       id: uuid(),
       name: "",
@@ -84,25 +92,25 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
     };
 
     projects.push(project);
-    
-    formik.setFieldValue("projects", projects);
 
-    dispatch(reducer({ ...customerInfo, projects }));
+    setFieldValue("projects", projects);
+
+    dispatch(reducer({ ...customerData, projects }));
   };
 
   const handleRemoveProject = (index: number) => {
-    let projects: ProjectInfo[] = [...customerInfo.projects];
+    let projects: ProjectInfo[] = [...customerData.projects];
 
     projects.splice(index, 1);
 
-    formik.setFieldValue("projects", projects);
+    setFieldValue("projects", projects);
 
-    dispatch(reducer({ ...customerInfo, projects }));
+    dispatch(reducer({ ...customerData, projects }));
   };
 
   return (
     <Grid container className="form-margin">
-      <form onSubmit={formik.handleSubmit} className="form-width">
+      <form onSubmit={handleSubmitFormik} className="form-width">
         <Grid container>
           <Grid display="flex" flexDirection="column" item xs={12} md={10}>
             <TextField
@@ -113,9 +121,9 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
               value={company}
               className="form-input-margin"
               onChange={handleInputChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.company && Boolean(formik.errors.company)}
-              helperText={formik.touched.company && formik.errors.company}
+              onBlur={handleBlur}
+              error={touched.company && Boolean(errors.company)}
+              helperText={touched.company && errors.company}
             />
             <TextField
               id="industry"
@@ -125,9 +133,9 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
               value={industry}
               className="form-input-margin"
               onChange={handleInputChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.industry && Boolean(formik.errors.industry)}
-              helperText={formik.touched.industry && formik.errors.industry}
+              onBlur={handleBlur}
+              error={touched.industry && Boolean(errors.industry)}
+              helperText={touched.industry && errors.industry}
             />
             <TextField
               id="about"
@@ -139,9 +147,9 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
               value={about}
               className="form-input-margin"
               onChange={handleInputChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.about && Boolean(formik.errors.about)}
-              helperText={formik.touched.about && formik.errors.about}
+              onBlur={handleBlur}
+              error={touched.about && Boolean(errors.about)}
+              helperText={touched.about && errors.about}
             />
             <FormControlLabel
               control={
@@ -191,10 +199,10 @@ const Form = ({ customerInfo, reducer, handleSubmit }: FormProps) => {
                 updateProjectState={updateProjectState}
                 handleRemoveProject={handleRemoveProject}
                 index={index}
-                onBlur={formik.handleBlur}
-                handleChangeValidation={formik.handleChange}
-                touched={formik.touched?.projects?.[index]}
-                errors={formik.errors?.projects?.[index]}
+                onBlur={handleBlur}
+                handleChangeValidation={handleChange}
+                touched={touched?.projects?.[index]}
+                errors={errors?.projects?.[index]}
               />
             );
           })}
