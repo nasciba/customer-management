@@ -1,4 +1,5 @@
-import { screen } from "@testing-library/react";
+/* eslint-disable testing-library/no-unnecessary-act */
+import { act, screen } from "@testing-library/react";
 import Home from "./Home";
 import { renderWithProviders } from "../../utils/testUtils";
 import useFilterCustomers from "./useFilterCustomers";
@@ -229,6 +230,7 @@ describe("Home Page", () => {
           name: /delete/i,
         });
         userEvent.click(deleteButton[0]);
+
         expect(
           await screen.findByText(
             "Are you sure you want to delete this customer?"
@@ -249,7 +251,7 @@ describe("Home Page", () => {
         const deleteButton = await screen.findAllByRole("button", {
           name: /delete/i,
         });
-        userEvent.click(deleteButton[0]);
+        act(() => userEvent.click(deleteButton[0]));
         userEvent.click(screen.getByRole("button", { name: /confirm/i }));
 
         expect(deleteCustomerFromDbMock).toHaveBeenCalled();
@@ -267,9 +269,9 @@ describe("Home Page", () => {
         const deleteButton = await screen.findAllByRole("button", {
           name: /delete/i,
         });
-        userEvent.click(deleteButton[0]);
+        act(() => userEvent.click(deleteButton[0]));
         userEvent.click(screen.getByRole("button", { name: /cancel/i }));
-        
+
         expect(
           screen.queryByText("Are you sure you want to delete this?")
         ).not.toBeInTheDocument();
