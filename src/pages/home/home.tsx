@@ -24,7 +24,7 @@ const Home = () => {
       minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.value}>
-          <div className="home-about-text">{params.value}</div>
+          <div className="home-table-cell">{params.value}</div>
         </Tooltip>
       ),
     },
@@ -49,7 +49,11 @@ const Home = () => {
       headerAlign: "center",
       minWidth: 200,
       renderCell(params) {
-        return <div>{params.value.length}</div>;
+        return (
+          <Link className="home-table-projects" color="primary" to={`/customer/${params.row.id}/projects`}>
+            <div > {params.value.length}</div>
+          </Link>
+        );
       },
       sortable: false,
       type: "number",
@@ -65,7 +69,7 @@ const Home = () => {
       minWidth: 400,
       renderCell: (params) => (
         <Tooltip title={params.value}>
-          <div className="home-about-text">{params.value}</div>
+          <div className="home-table-cell">{params.value}</div>
         </Tooltip>
       ),
       sortable: false,

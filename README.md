@@ -23,6 +23,11 @@ In the project directory, you can run:
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+While running the test suites you may notice the error `  Warning: An update to ForwardRef inside a test was not wrapped in act(...).`.
+
+This is an issue with the library as reported [here]
+(https://github.com/testing-library/react-testing-library/issues/1231).
+
 ### `npm run coverage`
 
 Runs all unit tests and generates a coverage report.

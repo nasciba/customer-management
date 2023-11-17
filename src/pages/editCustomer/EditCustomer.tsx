@@ -13,6 +13,7 @@ import { StoreState } from "../../types/store";
 import "./editCustomer.scss";
 
 const EditCustomerPage = () => {
+  const { id } = useParams() as { id: string };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const customerData: CustomerData = useSelector((state: StoreState) => {
@@ -21,7 +22,6 @@ const EditCustomerPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
 
-  const { id } = useParams() as { id: string };
 
   const handleSubmit = async () => {
     try {

@@ -1,7 +1,13 @@
 .home {
-  &-about-text {
+  &-table-cell {
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+
+  &-table-projects {
+    text-decoration: none;
+    font-weight: bold;
+    color: #845d9f;
   }
 
   &-button.MuiButtonBase-root {
