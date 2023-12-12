@@ -1,0 +1,10 @@
+.error-screen {
+  &-text {
+    margin: 0.5em;
+    text-decoration: none;
+  }
+
+  &-text:hover {
+    color: "#3a2e41";
+  }
+}

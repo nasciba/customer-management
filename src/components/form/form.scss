@@ -1,0 +1,23 @@
+.form {
+  &-input-margin.MuiTextField-root {
+    margin: 0.25em 0;
+  }
+
+  &-button-style.MuiButtonBase-root {
+    width: 10em;
+    font-family: "Lexend", Sans-serif;
+    border-radius: 40px;
+    height: 3em;
+    margin-top: 1em;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  &-margin {
+    padding: 0 1em 2em 1em;
+  }
+
+  &-width {
+    width: 100%;
+  } 
+}
