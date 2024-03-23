@@ -45,19 +45,12 @@ const Form = ({ customerData, reducer, handleSubmit }: FormProps) => {
     setFieldValue,
   } = formik;
 
-  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target;
-    let form = { ...customerData };
-    form = { ...customerData, [name]: checked };
-
-    dispatch(reducer(form));
-  };
-
   const handleInputChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event:  ChangeEvent<HTMLInputElement>
   ) => {
     handleChange(event);
-    const { name, value } = event.target;
+    const value = event.type === "checkbox" ? event.target.checked : event.target.value;
+    const { name } = event.target;
     let form = { ...customerData };
     form = { ...customerData, [name]: value };
 
@@ -156,7 +149,7 @@ const Form = ({ customerData, reducer, handleSubmit }: FormProps) => {
                 <Checkbox
                   name="isActive"
                   checked={isActive}
-                  onChange={handleCheckboxChange}
+                  onChange={handleInputChange}
                 />
               }
               label="Active Customer"
