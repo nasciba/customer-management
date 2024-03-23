@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { editCustomer } from "./editCustomerSlice";
 import { Box, Typography } from "@mui/material";
-import Form from "../../components/form/Form";
 import ErrorScreen from "../../components/errorScreen/ErrorScreen";
 import Loading from "../../components/loading/Loading";
 import { CustomerData } from "../../types/customerData";
@@ -11,6 +10,7 @@ import getCustomerById from "../../service/getCustomer";
 import editCustomerService from "../../service/editCustomer";
 import { StoreState } from "../../types/store";
 import "./editCustomer.scss";
+import Form from "../../components/form/Form";
 
 const EditCustomerPage = () => {
   const { id } = useParams() as { id: string };
